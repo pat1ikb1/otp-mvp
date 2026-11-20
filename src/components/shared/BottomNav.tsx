@@ -22,18 +22,18 @@ const NAV_MAP: Record<AppView, NavItem[]> = {
     { id: 'home', label: 'Home', icon: Home },
     { id: 'pockets', label: 'Pockets', icon: Wallet },
     { id: 'gifting', label: 'Gifting', icon: Gift },
-    { id: 'benefits', label: 'Benefits', icon: Sparkles },
+    { id: 'benefits', label: 'Perks', icon: Sparkles },
   ],
   kid: [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'piggy', label: 'Persely', icon: PiggyBank },
-    { id: 'skills', label: 'Skill Wallet', icon: GraduationCap },
+    { id: 'skills', label: 'Skills', icon: GraduationCap },
     { id: 'milestones', label: 'Quests', icon: Award },
   ],
   adult: [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'skills', label: 'Skills', icon: GraduationCap },
-    { id: 'value', label: 'Value / GO', icon: TrendingUp },
+    { id: 'value', label: 'OTP GO', icon: TrendingUp },
     { id: 'advisor', label: 'Advisor', icon: MessageSquareHeart },
   ],
 };
@@ -49,7 +49,11 @@ export function BottomNav({
 }) {
   const items = NAV_MAP[view];
   return (
-    <nav className="grid shrink-0 grid-cols-4 border-t border-black/8 bg-white/95 px-1.5 py-1.5 backdrop-blur-md">
+    <nav
+      aria-label="Primary phone navigation"
+      style={{ backgroundColor: 'var(--ds-card-bg)', borderColor: 'var(--ds-border-color)' }}
+      className="grid shrink-0 grid-cols-4 border-t px-1.5 py-1.5 backdrop-blur-md"
+    >
       {items.map((item) => {
         const Icon = item.icon;
         const active = activeTab === item.id;
@@ -58,14 +62,16 @@ export function BottomNav({
             key={item.id}
             type="button"
             onClick={() => onSelectTab(item.id)}
-            className={`flex flex-col items-center justify-center gap-0.5 rounded-xl py-1 transition-colors ${
-              active
-                ? 'bg-emerald-50 text-[#74BF1E]'
-                : 'text-[#5b736c] hover:text-[#0b2e26]'
-            }`}
+            aria-current={active ? 'page' : undefined}
+            style={{
+              borderRadius: 'var(--ds-btn-radius)',
+              backgroundColor: active ? 'var(--stage-badge-bg, #e4f3ec)' : 'transparent',
+              color: active ? 'var(--ds-primary, #005e48)' : 'var(--ds-text-muted, #4a635c)',
+            }}
+            className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 py-1 transition-colors hover:opacity-90"
           >
             <Icon className={`h-4 w-4 ${active ? 'stroke-[2.4]' : 'stroke-[1.8]'}`} />
-            <span className={`text-[10px] ${active ? 'font-semibold' : 'font-medium'}`}>
+            <span className={`text-[10px] leading-none ${active ? 'font-bold' : 'font-medium'}`}>
               {item.label}
             </span>
           </button>

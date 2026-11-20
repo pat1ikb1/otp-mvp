@@ -1,12 +1,16 @@
+import { useMemo } from 'react';
 import { GraduationCap, Lock, PiggyBank, Rocket } from 'lucide-react';
 import { MoneyFlow } from '@/components/shared/MoneyFlow';
+import { BlockCanvas, type BlockDefinition } from '@/components/studio/BlockCanvas';
 import { Progress } from '@/components/ui/progress';
 import { shortAvailable, totalBalance } from '@/engine/finance';
 import { getAge } from '@/engine/rules';
+import { useDesignStudio } from '@/state/designStudio';
 import { useLifestart } from '@/state/store';
 
 export function KidHome() {
   const { state, setTab } = useLifestart();
+  const { tokens } = useDesignStudio();
   const { core } = state;
   const age = getAge(core.monthIndex);
   const total = totalBalance(core);
@@ -15,100 +19,134 @@ export function KidHome() {
     ? Math.min(100, Math.round((activeGoal.saved / activeGoal.target) * 100))
     : 0;
 
-  return (
-    <div className="space-y-3 pb-2">
-      {/* Greeting Banner */}
-      <div className="rounded-2xl bg-[#74BF1E] p-4 text-white shadow-sm">
-        <p className="text-xs font-medium text-lime-100">
-          {age >= 15 ? 'OTP Junior · Teen Mode' : 'OTP Junior · Kid Mode'}
-        </p>
-        <h2 className="mt-0.5 text-lg font-extrabold">Hi {core.family.childName} 👋</h2>
-        <p className="mt-1 text-xs text-white/90">
-          Your Skill Wallet & Persely help you level up while your long-term vault grows.
-        </p>
-      </div>
-
-      {/* Quick Action Cards: Persely & Skill Wallet */}
-      <div className="grid grid-cols-2 gap-2.5">
-        <button
-          type="button"
-          onClick={() => setTab('piggy')}
-          className="rounded-2xl border border-lime-200 bg-white p-3 text-left shadow-xs transition-transform active:scale-[0.98]"
-        >
-          <div className="flex items-center justify-between">
-            <PiggyBank className="h-5 w-5 text-[#74BF1E]" />
-            <span className="text-[10px] font-bold text-[#3c8322]">Persely →</span>
-          </div>
-          <p className="mt-2 text-[11px] font-medium text-[#4c665f]">Free Spending Cash</p>
-          <p className="text-sm font-extrabold text-[#0b2e26]">
-            <MoneyFlow value={shortAvailable(core)} />
-          </p>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setTab('skills')}
-          className="rounded-2xl border border-amber-200 bg-amber-50/70 p-3 text-left shadow-xs transition-transform active:scale-[0.98]"
-        >
-          <div className="flex items-center justify-between">
-            <GraduationCap className="h-5 w-5 text-amber-600" />
-            <span className="text-[10px] font-bold text-amber-800">Spend →</span>
-          </div>
-          <p className="mt-2 text-[11px] font-medium text-amber-900">Skill Wallet</p>
-          <p className="text-sm font-extrabold text-amber-950">
-            <MoneyFlow value={core.account.skillWallet.balance} />
-          </p>
-        </button>
-      </div>
-
-      {/* Active Persely Goal Preview */}
-      {activeGoal && (
-        <div className="rounded-2xl border border-black/5 bg-white p-3.5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-[#0b2e26]">
-              {activeGoal.emoji} {activeGoal.name}
+  const blocks = useMemo<BlockDefinition[]>(
+    () => [
+      {
+        id: 'kid-hero',
+        title: 'Kid Mode & Vault',
+        eyeCue: 'See your future vault',
+        whyHere: 'Greets the child and anchors the read-only Future Vault amount at the top.',
+        render: () => (
+          <div
+            style={{
+              borderRadius: 'var(--ds-card-radius)',
+              padding: 'var(--ds-card-padding)',
+              background: 'linear-gradient(135deg, #1b3a07 0%, var(--ds-primary) 100%)',
+            }}
+            className="text-white shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <span className="rounded-full bg-[#74bf1e] px-2 py-0.5 text-[10px] font-bold text-[#08261e]">
+                {age >= 15 ? 'OTP Junior · Teen' : 'OTP Junior · Kid'}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-100">
+                <Rocket className="h-3 w-3 text-[#74bf1e]" /> Vault
+              </span>
+            </div>
+            <h2 className="mt-1.5 text-lg font-extrabold">Hi {core.family.childName}</h2>
+            <p className="mt-0.5 text-xl font-black text-white tabular-nums">
+              <MoneyFlow value={total} />
             </p>
-            <span className="text-xs font-bold text-[#74BF1E] tabular-nums">{goalPct}%</span>
+            {tokens.copyDensity !== 'concise' && (
+              <p className="mt-0.5 text-[10px] text-emerald-100/90">
+                Grown by {core.family.parentName} — full control unlocks at 18.
+              </p>
+            )}
           </div>
-          <Progress value={goalPct} className="mt-2 h-2 [&_[data-slot=progress-indicator]]:bg-[#74BF1E]" />
-          <div className="mt-1.5 flex justify-between text-[11px] text-[#4c665f]">
-            <span>Saved: <MoneyFlow value={activeGoal.saved} /></span>
-            <span>Target: <MoneyFlow value={activeGoal.target} /></span>
-          </div>
-        </div>
-      )}
+        ),
+      },
+      {
+        id: 'kid-duo',
+        title: 'Persely & Skill Cards',
+        eyeCue: 'Pick Persely or Skills',
+        whyHere: '2-column action cards separate everyday saving from education spending.',
+        render: () => (
+          <div className="grid grid-cols-2 gap-2.5">
+            <button
+              type="button"
+              onClick={() => setTab('piggy')}
+              style={{ borderRadius: 'var(--ds-card-radius)' }}
+              className="ds-card text-left transition-transform active:scale-[0.98]"
+            >
+              <div className="flex items-center justify-between">
+                <PiggyBank className="h-5 w-5 text-[#3c8322]" />
+                <span className="text-[10px] font-bold text-[#3c8322]">Persely →</span>
+              </div>
+              <p className="mt-2 text-[10px] font-semibold ds-text-muted">Free Cash</p>
+              <p className="text-sm font-extrabold ds-text-primary tabular-nums">
+                <MoneyFlow value={shortAvailable(core)} />
+              </p>
+            </button>
 
-      {/* Read-Only Future Vault */}
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-3.5">
-        <div className="flex items-center gap-2">
-          <Rocket className="h-4 w-4 text-[#74BF1E]" />
-          <p className="text-xs font-bold text-[#0b2e26]">Your Future Vault</p>
-        </div>
-        <p className="mt-1 text-lg font-extrabold text-[#74BF1E]">
-          <MoneyFlow value={total} />
-        </p>
-        <p className="mt-0.5 text-[11px] text-[#4c665f]">
-          {core.family.parentName} is growing this for your future. Full control unlocks at 18!
-        </p>
-      </div>
-
-      {/* Locked Teasers */}
-      <div className="space-y-1.5 rounded-2xl border border-dashed border-gray-300 bg-white/70 p-3 opacity-80">
-        <div className="flex items-center justify-between text-xs font-semibold text-gray-500">
-          <span className="flex items-center gap-1.5">
-            <Lock className="h-3.5 w-3.5" /> 5-Year OTP TBSZ & Reinvest Mode
-          </span>
-          <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px]">Unlocks at 18 🔒</span>
-        </div>
-        {age < 15 && (
-          <div className="flex items-center justify-between text-xs font-semibold text-gray-500">
-            <span className="flex items-center gap-1.5">
-              <Lock className="h-3.5 w-3.5" /> Achievement Cashback & Odd Jobs
-            </span>
-            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px]">Unlocks at 15 🔒</span>
+            <button
+              type="button"
+              onClick={() => setTab('skills')}
+              style={{ borderRadius: 'var(--ds-card-radius)' }}
+              className="ds-card border-amber-300/70 bg-amber-50/90 text-left transition-transform active:scale-[0.98]"
+            >
+              <div className="flex items-center justify-between">
+                <GraduationCap className="h-5 w-5 text-amber-800" />
+                <span className="text-[10px] font-bold text-amber-900">Spend →</span>
+              </div>
+              <p className="mt-2 text-[10px] font-semibold text-amber-900">Skill Wallet</p>
+              <p className="text-sm font-extrabold text-amber-950 tabular-nums">
+                <MoneyFlow value={core.account.skillWallet.balance} />
+              </p>
+            </button>
           </div>
-        )}
-      </div>
+        ),
+      },
+      {
+        id: 'kid-goal-unlock',
+        title: 'Active Goal & Milestone',
+        eyeCue: 'Track goal & next unlock',
+        whyHere: 'Keeps focus on one active savings goal plus the immediate next age milestone.',
+        render: () => (
+          <div className="space-y-2">
+            {activeGoal && (
+              <div className="ds-card">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-bold ds-text-primary">
+                    {activeGoal.emoji} {activeGoal.name}
+                  </p>
+                  <span style={{ color: 'var(--ds-primary)' }} className="text-xs font-extrabold tabular-nums">
+                    {goalPct}%
+                  </span>
+                </div>
+                <Progress
+                  value={goalPct}
+                  className="mt-2 h-2 [&_[data-slot=progress-indicator]]:bg-[#3c8322]"
+                />
+                <div className="mt-1.5 flex justify-between text-[10px] ds-text-muted tabular-nums">
+                  <span>
+                    <MoneyFlow value={activeGoal.saved} />
+                  </span>
+                  <span>
+                    Goal: <MoneyFlow value={activeGoal.target} />
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between rounded-xl border border-dashed border-[#005e48]/25 bg-white/80 px-3 py-2 text-[11px] font-semibold text-[#4a635c]">
+              <span className="inline-flex items-center gap-1.5">
+                <Lock className="h-3.5 w-3.5 text-[#005e48]" />
+                {age < 15 ? 'Cashback & Odd Jobs' : '5-Year Tax-Free OTP TBSZ'}
+              </span>
+              <span className="rounded-full bg-[#eef3f1] px-2 py-0.5 text-[10px] font-bold text-[#08261e]">
+                {age < 15 ? 'Age 15' : 'Age 18'}
+              </span>
+            </div>
+          </div>
+        ),
+      },
+    ],
+    [core, age, total, activeGoal, goalPct, setTab, tokens.copyDensity],
+  );
+
+  return (
+    <div className="pb-2">
+      <BlockCanvas screenId="kid-home" blocks={blocks} />
     </div>
   );
 }

@@ -29,9 +29,9 @@ export function Toast({
           {toast.tone === 'error' ? (
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
           ) : toast.tone === 'success' ? (
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#74BF1E]" />
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#74bf1e]" />
           ) : (
-            <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#74BF1E]" />
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#005e48]" />
           )}
           <span className="flex-1 leading-snug">{toast.text}</span>
           <button
