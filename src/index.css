@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --otp-emerald: #74BF1E;
+  --otp-forest: #0b2e26;
+  --otp-lime: #74BF1E;
+  --otp-teal: #74BF1E;
+  --otp-gold: #c89b3c;
+  --otp-amber: #d97706;
+  --otp-canvas: #f6f8f7;
+  --otp-crimson: #dc2626;
+
+  --background: #f6f8f7;
+  --foreground: #0b2e26;
+  --card: #ffffff;
+  --card-foreground: #0b2e26;
+  --popover: #ffffff;
+  --popover-foreground: #0b2e26;
+  --primary: #74BF1E;
+  --primary-foreground: #ffffff;
+  --secondary: #ebf3f0;
+  --secondary-foreground: #0b2e26;
+  --muted: #eef3f1;
+  --muted-foreground: #4c665f;
+  --accent: #e5f5de;
+  --accent-foreground: #0b2e26;
+  --destructive: #dc2626;
+  --border: #dce5e1;
+  --input: #dce5e1;
+  --ring: #74BF1E;
+  --chart-1: #74BF1E;
+  --chart-2: #74BF1E;
+  --chart-3: #74BF1E;
+  --chart-4: #c89b3c;
+  --chart-5: #d97706;
+  --radius: 0.75rem;
+}
+
+/* 4-Stage Visual Maturity Themes inside PhoneFrame */
+[data-stage-theme="parent"] {
+  --stage-surface: #f7faf8;
+  --stage-card-radius: 1rem;
+  --stage-header-bg: #74BF1E;
+  --stage-accent: #74BF1E;
+}
+
+[data-stage-theme="kid"] {
+  --stage-surface: #f4fbf1;
+  --stage-card-radius: 1.25rem;
+  --stage-header-bg: #74BF1E;
+  --stage-accent: #74BF1E;
+}
+
+[data-stage-theme="teen"] {
+  --stage-surface: #f3f7f6;
+  --stage-card-radius: 1rem;
+  --stage-header-bg: #74BF1E;
+  --stage-accent: #74BF1E;
+}
+
+[data-stage-theme="adult"] {
+  --stage-surface: #f5f6f6;
+  --stage-card-radius: 0.875rem;
+  --stage-header-bg: #74BF1E;
+  --stage-accent: #74BF1E;
+}
+
+@layer base {
+  body {
+    font-family: "Geist Variable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--otp-canvas);
+    color: var(--otp-forest);
+    margin: 0;
+    overflow: hidden;
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.phone-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 102, 79, 0.2) transparent;
+}
+.phone-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.phone-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.phone-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 102, 79, 0.22);
+  border-radius: 9999px;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
