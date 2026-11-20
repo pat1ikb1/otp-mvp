@@ -1,11 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { Crown, GraduationCap, Sparkles, UserCheck } from 'lucide-react';
-import { EyeFlowHud, EyeFlowOverlay } from '@/components/guidance/EyeFlowOverlay';
 import { BottomNav } from '@/components/shared/BottomNav';
 import { ConfettiBurst } from '@/components/shared/ConfettiBurst';
 import { Toast } from '@/components/shared/Toast';
 import { getAge, getStage, getStageMeta, getStageTheme } from '@/engine/rules';
-import { useDesignStudio } from '@/state/designStudio';
 import { useLifestart } from '@/state/store';
 
 export function PhoneFrame({
@@ -16,7 +14,6 @@ export function PhoneFrame({
   takeover?: React.ReactNode;
 }) {
   const { state, setTab, clearToast } = useLifestart();
-  const { cssVariables } = useDesignStudio();
   const { core, ui } = state;
   const scrollRef = useRef<HTMLDivElement>(null);
   const takeoverRef = useRef<HTMLDivElement>(null);
@@ -50,29 +47,17 @@ export function PhoneFrame({
   return (
     <div
       data-stage-theme={theme}
-      style={cssVariables as React.CSSProperties}
-      className="ds-phone-shell relative flex h-[690px] max-h-full w-[372px] shrink-0 flex-col overflow-hidden border-[7px] border-[#0e201b] shadow-[0_24px_64px_rgba(8,38,30,0.22)]"
+      className="ds-phone-shell relative flex h-[700px] max-h-full w-[372px] shrink-0 flex-col overflow-hidden border-[7px] border-[#111820] shadow-[0_24px_60px_rgba(18,34,52,0.18)]"
     >
       {/* Top Status Bar + Dynamic Island */}
-      <div
-        style={{ backgroundColor: 'var(--ds-card-bg)', color: 'var(--ds-text-primary)' }}
-        className="relative z-40 flex shrink-0 items-center justify-between px-6 pt-2.5 pb-1.5 text-[11px] font-semibold"
-      >
+      <div className="relative z-40 flex shrink-0 items-center justify-between bg-[#f2f5f8] px-6 pt-2.5 pb-1.5 text-[11px] font-semibold text-[#0b2e26]">
         <span className="tabular-nums">09:41</span>
-        <div className="h-5 w-24 rounded-full bg-[#0e201b]" />
-        <span style={{ color: 'var(--ds-primary)' }} className="tabular-nums text-[10px] font-bold">
-          5G · 98%
-        </span>
+        <div className="h-5 w-24 rounded-full bg-[#111820]" />
+        <span className="tabular-nums text-[10px] font-bold text-[#38571a]">5G · 98%</span>
       </div>
 
-      {/* App Header */}
-      <div
-        style={{
-          backgroundColor: 'var(--ds-header-bg)',
-          color: 'var(--ds-header-fg)',
-        }}
-        className="relative z-20 flex shrink-0 items-center justify-between px-4 py-2.5 transition-colors"
-      >
+      {/* OTP MobilBank Clean Off-White Header (No Gradient) */}
+      <div className="relative z-20 flex shrink-0 items-center justify-between border-b border-black/5 bg-[#f2f5f8] px-4 py-2.5 text-[#0b2e26]">
         <div className="flex items-center gap-2">
           <img
             src="/otp-logo.png"
@@ -81,27 +66,26 @@ export function PhoneFrame({
           />
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-bold tracking-tight">OTP Lifestart</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-1.5 py-0.5 text-[9px] font-semibold tracking-wide uppercase">
-                <ViewIcon className="h-2.5 w-2.5 text-[#74bf1e]" />
+              <span className="text-sm font-extrabold tracking-tight text-[#0b2e26]">
+                OTP Lifestart
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#e8f5e4] px-2 py-0.5 text-[9px] font-bold tracking-wide text-[#38571a] uppercase">
+                <ViewIcon className="h-2.5 w-2.5 text-[#52ae30]" />
                 {viewLabel}
               </span>
             </div>
-            <p className="text-[10px] opacity-80">
+            <p className="text-[10px] font-medium text-[#4a635c]">
               {stageMeta.badgeText} · Age {age}
             </p>
           </div>
         </div>
-        <span className="rounded-lg bg-white/12 px-2 py-1 text-[10px] font-semibold tabular-nums">
+        <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-[#38571a] shadow-xs tabular-nums">
           Mo {core.monthIndex}
         </span>
       </div>
 
-      {/* Live Eye-Flow Step Ribbon */}
-      <EyeFlowHud />
-
-      {/* Scrollable Screen Body + Eye-Flow Vector Overlay */}
-      <div className="relative flex min-h-0 flex-1 flex-col">
+      {/* Scrollable Screen Body */}
+      <div className="relative flex min-h-0 flex-1 flex-col bg-[#f2f5f8]">
         <div
           ref={scrollRef}
           style={{ padding: 'var(--ds-screen-padding)' }}
@@ -114,17 +98,12 @@ export function PhoneFrame({
         {takeover && (
           <div
             ref={takeoverRef}
-            style={{
-              backgroundColor: 'var(--ds-surface-bg)',
-              padding: 'var(--ds-screen-padding)',
-            }}
-            className="phone-scroll ds-phone-content-scale absolute inset-0 z-20 flex flex-col overflow-y-auto"
+            style={{ padding: 'var(--ds-screen-padding)' }}
+            className="phone-scroll ds-phone-content-scale absolute inset-0 z-20 flex flex-col overflow-y-auto bg-[#f2f5f8]"
           >
             {takeover}
           </div>
         )}
-
-        <EyeFlowOverlay scrollContainerRef={takeover ? takeoverRef : scrollRef} />
       </div>
 
       {/* Bottom Navigation */}

@@ -16,25 +16,15 @@ export function OtpGo25Takeover() {
     () => [
       {
         id: 'go25-hero',
-        title: 'OTP GO Gold Hero',
-        eyeCue: 'See 28× fee payback',
-        whyHere: 'Anchors the Age 25 transition with total portfolio value and Gold tier proof.',
         render: () => (
-          <div
-            style={{
-              borderRadius: 'var(--ds-card-radius)',
-              padding: 'var(--ds-card-padding)',
-              background: 'linear-gradient(135deg, var(--ds-header-bg) 0%, #1c3a2b 100%)',
-            }}
-            className="text-white ring-1 ring-[#c89b3c]/60 shadow-md"
-          >
-            <span className="inline-flex items-center gap-1 rounded-full bg-[#c89b3c] px-2.5 py-0.5 text-[10px] font-bold text-[#08261e] uppercase">
+          <div className="ds-card space-y-2">
+            <span className="otp-tag-new inline-flex items-center gap-1 px-2.5 py-0.5 text-[10px] font-bold uppercase">
               <Award className="h-3 w-3" /> Age 25 · OTP GO Gold
             </span>
-            <h2 className="mt-2 text-base font-extrabold leading-snug">
+            <h2 className="text-base font-extrabold leading-snug ds-text-primary">
               Lifestart pays for itself — {fvv.feeCoverageMultiple.toFixed(0)}× over.
             </h2>
-            <p className="mt-1.5 text-2xl font-black text-[#f3d17c]">
+            <p className="text-2xl font-black text-[#38571a]">
               <MoneyFlow value={total} />
             </p>
           </div>
@@ -42,24 +32,21 @@ export function OtpGo25Takeover() {
       },
       {
         id: 'go25-summary',
-        title: 'Net Value vs Fees',
-        eyeCue: 'Compare yield vs fees',
-        whyHere: 'Three-row financial proof replaces paragraphs with crisp side-by-side numbers.',
         render: () => (
-          <div className="ds-card space-y-2 text-xs">
+          <div className="ds-card space-y-2.5 text-xs">
             <div className="flex items-center justify-between">
               <span className="ds-text-muted">OTP GO Annual Fees</span>
               <span className="font-bold text-red-700 tabular-nums">-{formatFt(fvv.annualFees)}/yr</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="ds-text-muted">TBSZ Tax-Free Yield</span>
-              <span style={{ color: 'var(--ds-primary)' }} className="font-bold tabular-nums">
+              <span className="font-bold text-[#38571a] tabular-nums">
                 +{formatFt(fvv.grossAnnualYield)}/yr
               </span>
             </div>
             <div className="flex items-center justify-between border-t border-black/8 pt-2">
               <span className="font-bold ds-text-primary">Net vs Free Neobank</span>
-              <span style={{ color: 'var(--ds-primary)' }} className="text-sm font-black tabular-nums">
+              <span className="text-sm font-black text-[#38571a] tabular-nums">
                 +{formatFt(fvv.exclusiveAdvantage)}/yr
               </span>
             </div>
@@ -68,13 +55,10 @@ export function OtpGo25Takeover() {
       },
       {
         id: 'go25-cta',
-        title: '0% Tax Maturity & CTA',
-        eyeCue: 'Open Stay vs Leave proof',
-        whyHere: 'Confirms 0% SZJA+SZOCHO tax maturity right before entering the full Value Proof tab.',
         render: () => (
           <div className="space-y-3">
-            <div className="flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs text-amber-950">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#9a6e14]" />
+            <div className="ds-card flex items-start gap-2.5 text-xs ds-text-primary">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#52ae30]" />
               <span>
                 5-Yr TBSZ reached <strong>0% tax maturity</strong> — 28% Hungarian tax shielded.
               </span>
@@ -86,12 +70,8 @@ export function OtpGo25Takeover() {
                 dismissGoWelcome();
                 setTab('value');
               }}
-              style={{
-                borderRadius: 'var(--ds-btn-radius)',
-                backgroundColor: 'var(--ds-primary)',
-                color: 'var(--ds-primary-fg)',
-              }}
-              className="ds-btn h-11 w-full text-sm font-bold"
+              style={{ borderRadius: 'var(--ds-btn-radius)' }}
+              className="ds-btn h-11 w-full bg-[#38571a] text-sm font-bold text-white hover:bg-[#2c4614]"
             >
               Compare Stay vs. Leave
               <ArrowRight className="h-4 w-4" />

@@ -8,28 +8,21 @@ import {
   YAxis,
 } from 'recharts';
 import { buildChartSeries, formatCompactFt, formatFt } from '@/engine/finance';
-import { useDesignStudio } from '@/state/designStudio';
 import type { LifestartCoreState } from '@/types/lifestart';
 
 export function GrowthChart({ core }: { core: LifestartCoreState }) {
-  const { tokens } = useDesignStudio();
   const data = buildChartSeries(core);
 
   return (
     <div className="ds-card">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <div>
-          <p className="text-xs font-bold ds-text-primary">0 → 25 Growth Curve</p>
-          {tokens.copyDensity !== 'concise' && (
-            <p className="text-[10px] ds-text-muted">Solid = realized · Dashed = projected</p>
-          )}
-        </div>
-        <div className="flex items-center gap-2 text-[10px] font-medium ds-text-muted">
+        <p className="text-xs font-extrabold ds-text-primary">0 → 25 Growth Curve</p>
+        <div className="flex items-center gap-2 text-[10px] font-semibold ds-text-muted">
           <span className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full bg-[#005e48]" /> Actual
+            <span className="inline-block h-2 w-2 rounded-full bg-[#38571a]" /> Actual
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full bg-[#74bf1e]" /> Proj
+            <span className="inline-block h-2 w-2 rounded-full bg-[#52ae30]" /> Proj
           </span>
         </div>
       </div>
@@ -37,16 +30,6 @@ export function GrowthChart({ core }: { core: LifestartCoreState }) {
       <div className="h-36 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 6, right: 6, left: -18, bottom: 0 }}>
-            <defs>
-              <linearGradient id="otpActualGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#005e48" stopOpacity={0.32} />
-                <stop offset="95%" stopColor="#005e48" stopOpacity={0.02} />
-              </linearGradient>
-              <linearGradient id="otpProjGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#74bf1e" stopOpacity={0.22} />
-                <stop offset="95%" stopColor="#74bf1e" stopOpacity={0.0} />
-              </linearGradient>
-            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(11,46,38,0.08)" vertical={false} />
             <XAxis
               dataKey="age"
@@ -71,27 +54,29 @@ export function GrowthChart({ core }: { core: LifestartCoreState }) {
               ]}
               labelFormatter={(age) => `Age ${age}`}
               contentStyle={{
-                borderRadius: '10px',
-                border: '1px solid #dce5e1',
+                borderRadius: '12px',
+                border: '1px solid #e4e9f0',
                 fontSize: '11px',
               }}
             />
             <Area
               type="monotone"
               dataKey="actualTotal"
-              stroke="#005e48"
+              stroke="#38571a"
               strokeWidth={2.5}
-              fill="url(#otpActualGrad)"
+              fill="#e8f5e4"
+              fillOpacity={0.75}
               connectNulls={false}
               isAnimationActive={false}
             />
             <Area
               type="monotone"
               dataKey="projectedTotal"
-              stroke="#74bf1e"
+              stroke="#52ae30"
               strokeWidth={2}
               strokeDasharray="4 4"
-              fill="url(#otpProjGrad)"
+              fill="#e8f5e4"
+              fillOpacity={0.35}
               connectNulls={false}
               isAnimationActive={false}
             />
@@ -99,9 +84,9 @@ export function GrowthChart({ core }: { core: LifestartCoreState }) {
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-1.5 flex items-center justify-between border-t border-black/6 pt-1.5 text-[10px] ds-text-muted tabular-nums">
+      <div className="mt-2 flex items-center justify-between border-t border-black/6 pt-2 text-[10px] ds-text-muted tabular-nums">
         <span>Age 18: {formatCompactFt(data[18]?.actualTotal ?? data[18]?.projectedTotal ?? 0)}</span>
-        <span style={{ color: 'var(--ds-primary)' }} className="font-bold">
+        <span className="font-extrabold text-[#38571a]">
           Age 25: {formatCompactFt(data[25]?.actualTotal ?? data[25]?.projectedTotal ?? 0)}
         </span>
       </div>

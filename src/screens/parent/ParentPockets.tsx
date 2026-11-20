@@ -4,7 +4,7 @@ import { PocketCard } from '@/components/shared/PocketCard';
 import { BlockCanvas, type BlockDefinition } from '@/components/studio/BlockCanvas';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { formatFt, shortAvailable } from '@/engine/finance';
+import { formatFt, rebalanceThreePockets, shortAvailable } from '@/engine/finance';
 import { useLifestart } from '@/state/store';
 import type { PocketKey } from '@/types/lifestart';
 
@@ -17,52 +17,34 @@ export function ParentPockets() {
   const [transferAmount, setTransferAmount] = useState<number>(20_000);
   const [transferOpen, setTransferOpen] = useState(false);
 
-  const updateLong = (nextLong: number) => {
-    const clamped = Math.max(10, Math.min(85, nextLong));
-    const rem = 100 - clamped;
-    const prevRem = allocation.mid + allocation.short;
-    const nextMid =
-      prevRem > 0 ? Math.round((allocation.mid / prevRem) * rem) : Math.round(rem / 2);
-    const nextShort = 100 - clamped - nextMid;
-    setAllocation({ long: clamped, mid: nextMid, short: nextShort });
-  };
-
-  const updateMid = (nextMid: number) => {
-    const maxMid = 100 - allocation.long;
-    const clampedMid = Math.max(0, Math.min(maxMid, nextMid));
-    const nextShort = 100 - allocation.long - clampedMid;
-    setAllocation({ long: allocation.long, mid: clampedMid, short: nextShort });
+  const handlePocketSlide = (key: PocketKey, nextVal: number) => {
+    setAllocation(rebalanceThreePockets(allocation, key, nextVal));
   };
 
   const blocks = useMemo<BlockDefinition[]>(
     () => [
       {
         id: 'pockets-monthly',
-        title: 'Monthly Auto-Save',
-        eyeCue: 'Set monthly amount',
-        whyHere: 'Starts with the single biggest lever: monthly contribution rate.',
         render: () => (
           <div className="ds-card">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-bold ds-text-primary">Monthly Auto-Deposit</p>
-              <span style={{ color: 'var(--ds-primary)' }} className="text-xs font-extrabold tabular-nums">
+              <p className="text-xs font-extrabold ds-text-primary">Monthly Auto-Deposit</p>
+              <span className="text-xs font-extrabold text-[#38571a] tabular-nums">
                 {formatFt(monthlyContribution)}/mo
               </span>
             </div>
-            <div className="mt-2 grid grid-cols-4 gap-1.5">
+            <div className="mt-2.5 grid grid-cols-4 gap-1.5">
               {[5_000, 10_000, 15_000, 25_000].map((amt) => (
                 <button
                   key={amt}
                   type="button"
                   onClick={() => setMonthly(amt)}
-                  style={{
-                    borderRadius: 'var(--ds-btn-radius)',
-                    backgroundColor:
-                      monthlyContribution === amt ? 'var(--ds-primary)' : 'var(--ds-card-muted-bg)',
-                    color:
-                      monthlyContribution === amt ? 'var(--ds-primary-fg)' : 'var(--ds-text-primary)',
-                  }}
-                  className="ds-btn py-1.5 text-xs font-bold tabular-nums"
+                  style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                  className={`ds-btn py-1.5 text-xs font-bold tabular-nums ${
+                    monthlyContribution === amt
+                      ? 'bg-[#38571a] text-white'
+                      : 'bg-[#f2f5f8] text-[#0b2e26] hover:bg-[#e8eef3]'
+                  }`}
                 >
                   {amt / 1000}k
                 </button>
@@ -73,60 +55,83 @@ export function ParentPockets() {
       },
       {
         id: 'pockets-sliders',
-        title: '100% Split Rules',
-        eyeCue: 'Adjust 3-pocket ratio',
-        whyHere: 'Interactive sliders locked to 100% give instant visual feedback with zero mental math.',
         render: () => (
-          <div className="ds-card space-y-3">
+          <div className="ds-card space-y-3.5">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-bold ds-text-primary">Split Allocation</p>
-              <span className="rounded-full bg-[#e5f5de] px-2 py-0.5 text-[10px] font-bold text-[#08261e] tabular-nums">
-                100% Locked
+              <p className="text-xs font-extrabold ds-text-primary">Proportional 3-Pocket Split</p>
+              <span className="rounded-full bg-[#e8f5e4] px-2.5 py-0.5 text-[10px] font-bold text-[#38571a] tabular-nums">
+                {allocation.long + allocation.mid + allocation.short}% Total
               </span>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs">
-                <span className="font-semibold text-[#005e48]">Long Vault</span>
-                <span className="font-bold tabular-nums ds-text-primary">{allocation.long}%</span>
-              </div>
-              <Slider
-                min={10}
-                max={85}
-                step={5}
-                value={[allocation.long]}
-                onValueChange={(v) => updateLong(Array.isArray(v) ? v[0] : v)}
+            {/* Proportional Visual Bar */}
+            <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-[#e4e9f0]">
+              <div
+                style={{ width: `${allocation.long}%` }}
+                className="bg-[#38571a] transition-all duration-150"
+              />
+              <div
+                style={{ width: `${allocation.mid}%` }}
+                className="bg-[#0d9488] transition-all duration-150"
+              />
+              <div
+                style={{ width: `${allocation.short}%` }}
+                className="bg-[#52ae30] transition-all duration-150"
               />
             </div>
 
+            {/* All 3 Sliders share a 0..100 scale so movement across pockets is realistically proportional */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
-                <span className="font-semibold text-[#0d9488]">Mid Buffer</span>
-                <span className="font-bold tabular-nums ds-text-primary">{allocation.mid}%</span>
+                <span className="font-bold text-[#38571a]">Long Vault</span>
+                <span className="font-extrabold tabular-nums ds-text-primary">{allocation.long}%</span>
               </div>
               <Slider
                 min={0}
-                max={100 - allocation.long}
-                step={5}
-                value={[allocation.mid]}
-                onValueChange={(v) => updateMid(Array.isArray(v) ? v[0] : v)}
+                max={100}
+                step={1}
+                value={[allocation.long]}
+                aria-label="Long Vault percentage"
+                onValueChange={(v) => handlePocketSlide('long', Array.isArray(v) ? v[0] : v)}
               />
             </div>
 
-            <div className="flex justify-between rounded-xl bg-[#e7f6d5] px-3 py-1.5 text-xs text-[#1b3a07]">
-              <span className="font-semibold">Short Cash</span>
-              <span className="font-extrabold tabular-nums">{allocation.short}%</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs">
+                <span className="font-bold text-[#0d9488]">Mid Buffer</span>
+                <span className="font-extrabold tabular-nums ds-text-primary">{allocation.mid}%</span>
+              </div>
+              <Slider
+                min={0}
+                max={100}
+                step={1}
+                value={[allocation.mid]}
+                aria-label="Mid Buffer percentage"
+                onValueChange={(v) => handlePocketSlide('mid', Array.isArray(v) ? v[0] : v)}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs">
+                <span className="font-bold text-[#52ae30]">Short Cash</span>
+                <span className="font-extrabold tabular-nums ds-text-primary">{allocation.short}%</span>
+              </div>
+              <Slider
+                min={0}
+                max={100}
+                step={1}
+                value={[allocation.short]}
+                aria-label="Short Cash percentage"
+                onValueChange={(v) => handlePocketSlide('short', Array.isArray(v) ? v[0] : v)}
+              />
             </div>
           </div>
         ),
       },
       {
         id: 'pockets-cards',
-        title: 'Pocket Balances & Transfer',
-        eyeCue: 'Review or move cash',
-        whyHere: 'Balances sit below rules; transfer controls stay collapsed until needed to prevent clutter.',
         render: () => (
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <PocketCard
               pocketKey="long"
               amount={pockets.long}
@@ -147,10 +152,10 @@ export function ParentPockets() {
               <button
                 type="button"
                 onClick={() => setTransferOpen((o) => !o)}
-                className="flex w-full items-center justify-between text-xs font-bold ds-text-primary"
+                className="flex w-full items-center justify-between text-xs font-extrabold ds-text-primary"
               >
                 <span className="inline-flex items-center gap-1.5">
-                  <ArrowRightLeft className="h-3.5 w-3.5 text-[#005e48]" />
+                  <ArrowRightLeft className="h-3.5 w-3.5 text-[#52ae30]" />
                   Move Between Pockets
                 </span>
                 {transferOpen ? (
@@ -161,13 +166,13 @@ export function ParentPockets() {
               </button>
 
               {transferOpen && (
-                <div className="mt-2.5 space-y-2 border-t border-black/6 pt-2.5">
+                <div className="mt-3 space-y-2.5 border-t border-black/6 pt-3">
                   <div className="flex items-center gap-2">
                     <select
                       aria-label="From pocket"
                       value={fromPocket}
                       onChange={(e) => setFromPocket(e.target.value as PocketKey)}
-                      className="flex-1 rounded-xl border border-[#dce5e1] bg-[#f4f7f5] px-2 py-1.5 text-xs font-semibold text-[#08261e]"
+                      className="flex-1 rounded-xl border border-black/10 bg-[#f2f5f8] px-2.5 py-1.5 text-xs font-semibold text-[#0b2e26]"
                     >
                       <option value="long">Long</option>
                       <option value="mid">Mid</option>
@@ -178,7 +183,7 @@ export function ParentPockets() {
                       aria-label="To pocket"
                       value={toPocket}
                       onChange={(e) => setToPocket(e.target.value as PocketKey)}
-                      className="flex-1 rounded-xl border border-[#dce5e1] bg-[#f4f7f5] px-2 py-1.5 text-xs font-semibold text-[#08261e]"
+                      className="flex-1 rounded-xl border border-black/10 bg-[#f2f5f8] px-2.5 py-1.5 text-xs font-semibold text-[#0b2e26]"
                     >
                       <option value="long">Long</option>
                       <option value="mid">Mid</option>
@@ -191,16 +196,12 @@ export function ParentPockets() {
                         key={amt}
                         type="button"
                         onClick={() => setTransferAmount(amt)}
-                        style={{
-                          borderRadius: 'var(--ds-btn-radius)',
-                          backgroundColor:
-                            transferAmount === amt ? 'var(--ds-primary)' : 'var(--ds-card-muted-bg)',
-                          color:
-                            transferAmount === amt
-                              ? 'var(--ds-primary-fg)'
-                              : 'var(--ds-text-primary)',
-                        }}
-                        className="ds-btn py-1 text-[11px] font-bold tabular-nums"
+                        style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                        className={`ds-btn py-1.5 text-[11px] font-bold tabular-nums ${
+                          transferAmount === amt
+                            ? 'bg-[#38571a] text-white'
+                            : 'bg-[#f2f5f8] text-[#0b2e26]'
+                        }`}
                       >
                         {amt / 1000}k Ft
                       </button>
@@ -210,12 +211,8 @@ export function ParentPockets() {
                     size="sm"
                     disabled={fromPocket === toPocket}
                     onClick={() => moveMoney(fromPocket, toPocket, transferAmount)}
-                    style={{
-                      borderRadius: 'var(--ds-btn-radius)',
-                      backgroundColor: 'var(--ds-primary)',
-                      color: 'var(--ds-primary-fg)',
-                    }}
-                    className="ds-btn w-full text-xs font-bold"
+                    style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                    className="ds-btn w-full bg-[#38571a] text-xs font-bold text-white"
                   >
                     Transfer {formatFt(transferAmount)}
                   </Button>

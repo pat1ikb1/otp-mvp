@@ -21,9 +21,9 @@ export function StageTimeline() {
   const currentIndex = STAGES.findIndex((s) => s.id === currentStage);
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-3 rounded-2xl border border-[#dce5e1] bg-white px-3 py-2 shadow-xs">
+    <div className="ds-card mx-auto flex w-full max-w-5xl flex-wrap items-center gap-3 !p-2.5">
       {/* 5 Lifecycle Stage Stops */}
-      <div className="grid min-w-[420px] flex-1 grid-cols-5 gap-1.5">
+      <div className="grid min-w-[400px] flex-1 grid-cols-5 gap-1.5">
         {STAGES.map((s, idx) => {
           const meta = getStageMeta(s.id);
           const isCurrent = s.id === currentStage;
@@ -33,21 +33,22 @@ export function StageTimeline() {
               key={s.id}
               type="button"
               onClick={() => jumpToMonth(s.jumpMonth)}
-              className={`flex items-center justify-between rounded-xl px-2.5 py-1.5 text-left transition-all ${
+              style={{ borderRadius: 'var(--ds-btn-radius)' }}
+              className={`ds-btn flex items-center justify-between px-3 py-1.5 text-left transition-all ${
                 isCurrent
-                  ? 'bg-[#08261e] text-white shadow-xs'
+                  ? 'bg-[#38571a] text-white shadow-xs'
                   : isPast
-                    ? 'bg-[#e5f5de] text-[#08261e] hover:bg-[#d6eec9]'
-                    : 'bg-[#f4f7f5] text-[#4a635c] hover:bg-[#ebf3f0]'
+                    ? 'bg-[#e8f5e4] text-[#0b2e26] hover:bg-[#dbf0d4]'
+                    : 'bg-[#f2f5f8] text-[#4a635c] hover:bg-[#e8eef3]'
               }`}
             >
               <div className="flex items-center gap-1.5">
                 <span
                   className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
                     isCurrent
-                      ? 'bg-[#74bf1e] text-[#08261e]'
+                      ? 'bg-[#52ae30] text-white'
                       : isPast
-                        ? 'bg-[#005e48] text-white'
+                        ? 'bg-[#38571a] text-white'
                         : 'bg-black/10 text-[#4a635c]'
                   }`}
                 >
@@ -57,7 +58,7 @@ export function StageTimeline() {
               </div>
               <span
                 className={`text-[10px] font-medium tabular-nums ${
-                  isCurrent ? 'text-emerald-200' : 'text-[#4a635c]'
+                  isCurrent ? 'text-emerald-100' : 'text-[#4a635c]'
                 }`}
               >
                 {meta.shortLabel}
@@ -70,7 +71,7 @@ export function StageTimeline() {
       {/* Inline Age Scrubber + Quick Step */}
       <div className="flex items-center gap-2.5 border-l border-black/8 pl-3">
         <div className="w-32 space-y-1">
-          <div className="flex items-center justify-between text-[10px] font-bold text-[#08261e] tabular-nums">
+          <div className="flex items-center justify-between text-[10px] font-bold text-[#0b2e26] tabular-nums">
             <span>Age {age}</span>
             <span className="text-[#4a635c]">{monthsIntoYear}m</span>
           </div>
@@ -91,16 +92,18 @@ export function StageTimeline() {
           <button
             type="button"
             onClick={() => jumpToMonth(state.core.monthIndex + 1)}
-            className="inline-flex items-center gap-1 rounded-lg border border-[#dce5e1] bg-[#f9fbfa] px-2 py-1 text-[10px] font-bold text-[#08261e] hover:bg-[#ebf3f0]"
+            style={{ borderRadius: 'var(--ds-btn-radius)' }}
+            className="ds-btn inline-flex items-center gap-1 bg-[#f2f5f8] px-2.5 py-1 text-[10px] font-bold text-[#0b2e26] hover:bg-[#e8eef3]"
           >
-            <FastForward className="h-3 w-3 text-[#005e48]" /> +1m
+            <FastForward className="h-3 w-3 text-[#52ae30]" /> +1m
           </button>
           <button
             type="button"
             onClick={() => jumpToMonth(state.core.monthIndex + 12)}
-            className="inline-flex items-center gap-1 rounded-lg border border-[#dce5e1] bg-[#f9fbfa] px-2 py-1 text-[10px] font-bold text-[#08261e] hover:bg-[#ebf3f0]"
+            style={{ borderRadius: 'var(--ds-btn-radius)' }}
+            className="ds-btn inline-flex items-center gap-1 bg-[#f2f5f8] px-2.5 py-1 text-[10px] font-bold text-[#0b2e26] hover:bg-[#e8eef3]"
           >
-            <FastForward className="h-3 w-3 text-[#005e48]" /> +1y
+            <FastForward className="h-3 w-3 text-[#52ae30]" /> +1y
           </button>
         </div>
       </div>

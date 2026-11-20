@@ -29,11 +29,8 @@ export function AdultHome() {
     () => [
       {
         id: 'adult-hero',
-        title: 'Portfolio & Switches',
-        eyeCue: 'Check wealth & reinvest',
-        whyHere: 'Anchors total net worth and puts the two key wealth levers (Reinvest + Saving) at thumb reach.',
         render: () => (
-          <div className="ds-card space-y-2.5">
+          <div className="ds-card space-y-3">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-[11px] font-semibold ds-text-muted">
@@ -46,7 +43,7 @@ export function AdultHome() {
               <button
                 type="button"
                 onClick={() => setTab('value')}
-                className="rounded-full bg-[#e5f5de] px-2.5 py-1 text-[10px] font-bold text-[#08261e] hover:bg-[#d5efc9]"
+                className="rounded-full bg-[#e8f5e4] px-2.5 py-1 text-[10px] font-bold text-[#38571a] hover:bg-[#dbf0d4]"
               >
                 Value Proof →
               </button>
@@ -55,7 +52,7 @@ export function AdultHome() {
             <div className="ds-card-muted flex items-center justify-between p-2.5">
               <div>
                 <p className="flex items-center gap-1 text-xs font-bold ds-text-primary">
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#005e48]" />
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#52ae30]" />
                   {isReinvest ? 'TBSZ Reinvest ON' : 'Spending Dividends'}
                 </p>
                 <p className="text-[10px] ds-text-muted">
@@ -73,7 +70,7 @@ export function AdultHome() {
             <div className="ds-card-muted flex items-center justify-between p-2.5">
               <div>
                 <p className="flex items-center gap-1 text-xs font-semibold ds-text-primary">
-                  <TrendingUp className="h-3.5 w-3.5 text-[#005e48]" /> Own Monthly Saving
+                  <TrendingUp className="h-3.5 w-3.5 text-[#52ae30]" /> Own Monthly Saving
                 </p>
                 <p className="text-[10px] ds-text-muted">
                   {core.account.adultMonthlyContribution > 0
@@ -93,38 +90,31 @@ export function AdultHome() {
       },
       {
         id: 'adult-bond',
-        title: '5-Yr TBSZ Super Bond',
-        eyeCue: 'Track 0% tax countdown',
-        whyHere: 'Shows tax-free maturity progress directly beneath your portfolio levers.',
         render: () => <BondCard core={core} />,
       },
       {
         id: 'adult-pockets',
-        title: '3 Pockets & Transfer',
-        eyeCue: 'Manage 3 pockets',
-        whyHere: 'Shows Long/Mid/Short balances with collapsible transfer controls.',
         render: () => (
-          <div className="space-y-1.5">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between px-0.5">
-              <p className="text-xs font-bold ds-text-primary">Your 3 Pockets</p>
+              <p className="text-xs font-extrabold ds-text-primary">Your 3 Pockets</p>
               <button
                 type="button"
                 onClick={() => setManageOpen((o) => !o)}
-                style={{ color: 'var(--ds-primary)' }}
-                className="inline-flex items-center gap-1 text-[11px] font-bold"
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#38571a]"
               >
                 Transfer {manageOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
               </button>
             </div>
 
             {manageOpen && (
-              <div className="ds-card space-y-2">
+              <div className="ds-card space-y-2.5">
                 <div className="flex items-center gap-2">
                   <select
                     aria-label="From pocket"
                     value={fromPocket}
                     onChange={(e) => setFromPocket(e.target.value as PocketKey)}
-                    className="flex-1 rounded-xl border border-[#dce5e1] bg-[#f4f7f5] px-2 py-1.5 text-xs font-semibold text-[#08261e]"
+                    className="flex-1 rounded-xl border border-black/10 bg-[#f2f5f8] px-2 py-1.5 text-xs font-semibold text-[#0b2e26]"
                   >
                     <option value="long">Long</option>
                     <option value="mid">Mid</option>
@@ -135,7 +125,7 @@ export function AdultHome() {
                     aria-label="To pocket"
                     value={toPocket}
                     onChange={(e) => setToPocket(e.target.value as PocketKey)}
-                    className="flex-1 rounded-xl border border-[#dce5e1] bg-[#f4f7f5] px-2 py-1.5 text-xs font-semibold text-[#08261e]"
+                    className="flex-1 rounded-xl border border-black/10 bg-[#f2f5f8] px-2 py-1.5 text-xs font-semibold text-[#0b2e26]"
                   >
                     <option value="long">Long</option>
                     <option value="mid">Mid</option>
@@ -146,12 +136,8 @@ export function AdultHome() {
                   size="xs"
                   disabled={fromPocket === toPocket}
                   onClick={() => moveMoney(fromPocket, toPocket, 20_000)}
-                  style={{
-                    borderRadius: 'var(--ds-btn-radius)',
-                    backgroundColor: 'var(--ds-primary)',
-                    color: 'var(--ds-primary-fg)',
-                  }}
-                  className="ds-btn w-full text-xs font-bold"
+                  style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                  className="ds-btn w-full bg-[#38571a] text-xs font-bold text-white"
                 >
                   Transfer 20,000 Ft
                 </Button>
@@ -171,9 +157,6 @@ export function AdultHome() {
       },
       {
         id: 'adult-chart',
-        title: '0→25 Trajectory',
-        eyeCue: 'Review compounding curve',
-        whyHere: 'Visualizes realized growth vs future trajectory to Age 25.',
         render: () => <GrowthChart core={core} />,
       },
     ],

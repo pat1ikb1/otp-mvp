@@ -6,100 +6,102 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --otp-emerald: #005e48;
-  --otp-forest: #08261e;
+  --otp-emerald: #38571a;
+  --otp-green: #52ae30;
+  --otp-forest: #0b2e26;
   --otp-lime: #74bf1e;
-  --otp-teal: #0d9488;
+  --otp-sage: #b4d6b6;
+  --otp-sage-soft: #e8f5e4;
+  --otp-peach-bg: #fdf0e2;
+  --otp-peach-fg: #c86d18;
   --otp-gold: #c89b3c;
-  --otp-amber: #d97706;
-  --otp-canvas: #f4f7f5;
+  --otp-canvas: #f2f5f8;
   --otp-crimson: #dc2626;
 
-  --background: #f4f7f5;
+  --background: #f2f5f8;
   --foreground: #0b2e26;
   --card: #ffffff;
   --card-foreground: #0b2e26;
   --popover: #ffffff;
   --popover-foreground: #0b2e26;
-  --primary: #005e48;
+  --primary: #38571a;
   --primary-foreground: #ffffff;
-  --secondary: #ebf3f0;
+  --secondary: #e8eef3;
   --secondary-foreground: #0b2e26;
-  --muted: #eef3f1;
+  --muted: #e9eff4;
   --muted-foreground: #4a635c;
-  --accent: #e5f5de;
-  --accent-foreground: #08261e;
+  --accent: #e8f5e4;
+  --accent-foreground: #0b2e26;
   --destructive: #dc2626;
-  --border: #dce5e1;
-  --input: #dce5e1;
-  --ring: #005e48;
-  --chart-1: #005e48;
-  --chart-2: #74bf1e;
+  --border: rgba(11, 46, 38, 0.09);
+  --input: rgba(11, 46, 38, 0.14);
+  --ring: #52ae30;
+  --chart-1: #38571a;
+  --chart-2: #52ae30;
   --chart-3: #0d9488;
   --chart-4: #c89b3c;
   --chart-5: #d97706;
-  --radius: 0.75rem;
+  --radius: 0.875rem;
 
-  /* Live Design Studio Tokens */
-  --ds-screen-padding: 14px;
-  --ds-block-gap: 10px;
-  --ds-card-padding: 14px;
-  --ds-card-radius: 16px;
-  --ds-btn-radius: 12px;
+  /* Final Locked Design Tokens (Off-White + White Neuromorphic OTP Brandbook) */
+  --ds-screen-padding: 17px;
+  --ds-block-gap: 26px;
+  --ds-card-padding: 22px;
+  --ds-card-radius: 14px;
+  --ds-btn-radius: 25px;
   --ds-phone-radius: 42px;
   --ds-font-scale: 1;
   --ds-font-family: "Geist Variable", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  --ds-card-shadow: 0 1px 3px rgba(8, 38, 30, 0.06), 0 1px 2px rgba(8, 38, 30, 0.04);
+  --ds-card-shadow:
+    0 8px 20px rgba(18, 34, 52, 0.06),
+    0 2px 5px rgba(18, 34, 52, 0.04),
+    -3px -3px 8px rgba(255, 255, 255, 0.96);
   --ds-glass-blur: 0px;
-  --ds-border-width: 1px;
-  --ds-border-color: rgba(11, 46, 38, 0.09);
-  --ds-primary: #005e48;
+  --ds-border-width: 1.5px;
+  --ds-border-color: rgba(255, 255, 255, 0.96);
+  --ds-primary: #38571a;
   --ds-primary-fg: #ffffff;
   --ds-accent-lime: #74bf1e;
   --ds-accent-lime-fg: #08261e;
-  --ds-header-bg: #08261e;
-  --ds-header-fg: #ffffff;
-  --ds-surface-bg: #f4f7f5;
+  --ds-header-bg: #f2f5f8;
+  --ds-header-fg: #0b2e26;
+  --ds-surface-bg: #f2f5f8;
   --ds-card-bg: #ffffff;
-  --ds-card-muted-bg: #f2f6f4;
+  --ds-card-muted-bg: #f2f5f8;
   --ds-text-primary: #0b2e26;
   --ds-text-muted: #4a635c;
-  --ds-dim-opacity: 0.76;
+  --ds-dim-opacity: 0.8;
   --ds-transition-ms: 240ms;
 }
 
-/* 4-Stage Visual Maturity Themes inside PhoneFrame */
+/* 4-Stage Visual Maturity Accents (Flat Brandbook) */
 [data-stage-theme="parent"] {
-  --stage-tint: rgba(0, 94, 72, 0.06);
-  --stage-badge-bg: #e4f3ec;
-  --stage-badge-fg: #08261e;
-  --stage-accent: #005e48;
+  --stage-badge-bg: #e8f5e4;
+  --stage-badge-fg: #264210;
+  --stage-accent: #38571a;
 }
 
 [data-stage-theme="kid"] {
-  --stage-tint: rgba(116, 191, 30, 0.12);
   --stage-badge-bg: #e7f6d5;
-  --stage-badge-fg: #1b3a07;
-  --stage-accent: #3c8322;
+  --stage-badge-fg: #264210;
+  --stage-accent: #52ae30;
 }
 
 [data-stage-theme="teen"] {
-  --stage-tint: rgba(13, 148, 136, 0.1);
-  --stage-badge-bg: #dff4f1;
+  --stage-badge-bg: #e4f4f1;
   --stage-badge-fg: #0f3f3a;
-  --stage-accent: #0f766e;
+  --stage-accent: #0d9488;
 }
 
 [data-stage-theme="adult"] {
-  --stage-tint: rgba(200, 155, 60, 0.1);
-  --stage-badge-bg: #f7efd8;
-  --stage-badge-fg: #423007;
-  --stage-accent: #9a6e14;
+  --stage-badge-bg: #fdf0e2;
+  --stage-badge-fg: #8c4b0e;
+  --stage-accent: #38571a;
 }
 
 @layer base {
   body {
-    font-family: "Geist Variable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--ds-font-family);
     background-color: var(--otp-canvas);
     color: var(--otp-forest);
     margin: 0;
@@ -111,7 +113,7 @@
   }
 
   :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    outline: 2px solid var(--ds-primary, #005e48);
+    outline: 2px solid var(--ds-primary, #38571a);
     outline-offset: 2px;
   }
 
@@ -128,7 +130,7 @@
 
 .phone-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 94, 72, 0.24) transparent;
+  scrollbar-color: rgba(56, 87, 26, 0.2) transparent;
 }
 .phone-scroll::-webkit-scrollbar {
   width: 4px;
@@ -137,7 +139,7 @@
   background: transparent;
 }
 .phone-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 94, 72, 0.24);
+  background: rgba(56, 87, 26, 0.2);
   border-radius: 9999px;
 }
 
@@ -148,15 +150,12 @@
   display: none;
 }
 
-/* Design Studio Dynamic Primitives inside Phone */
+/* OTP MobilBank Neuromorphic Primitives (Zero Gradients) */
 .ds-phone-shell {
   font-family: var(--ds-font-family);
   border-radius: var(--ds-phone-radius);
   background-color: var(--ds-surface-bg);
   color: var(--ds-text-primary);
-  transition:
-    border-radius var(--ds-transition-ms) ease-out,
-    background-color var(--ds-transition-ms) ease-out;
 }
 
 .ds-phone-content-scale {
@@ -170,25 +169,27 @@
   padding: var(--ds-card-padding);
   border: var(--ds-border-width) solid var(--ds-border-color);
   box-shadow: var(--ds-card-shadow);
-  backdrop-filter: blur(var(--ds-glass-blur));
-  -webkit-backdrop-filter: blur(var(--ds-glass-blur));
   transition:
-    border-radius var(--ds-transition-ms) ease-out,
-    padding var(--ds-transition-ms) ease-out,
     box-shadow var(--ds-transition-ms) ease-out,
-    background-color var(--ds-transition-ms) ease-out;
+    transform 150ms ease-out;
+}
+
+.ds-card-interactive:hover {
+  box-shadow:
+    0 12px 24px rgba(18, 34, 52, 0.09),
+    0 3px 8px rgba(18, 34, 52, 0.05),
+    -3px -3px 8px rgba(255, 255, 255, 0.98);
 }
 
 .ds-card-muted {
   background-color: var(--ds-card-muted-bg);
   color: var(--ds-text-primary);
-  border-radius: calc(var(--ds-card-radius) * 0.78);
+  border-radius: calc(var(--ds-card-radius) * 0.82);
 }
 
 .ds-btn {
   border-radius: var(--ds-btn-radius);
   transition:
-    border-radius var(--ds-transition-ms) ease-out,
     transform 120ms ease-out,
     background-color 150ms ease-out,
     box-shadow 150ms ease-out;
@@ -206,66 +207,56 @@
   color: var(--ds-text-muted);
 }
 
-/* Pointer Drag Handle Discipline */
-.ds-drag-handle {
-  cursor: grab;
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
+.otp-action-circle {
+  background-color: #ffffff;
+  color: var(--otp-green);
+  box-shadow:
+    0 6px 16px rgba(18, 34, 52, 0.07),
+    -2px -2px 6px rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.96);
 }
 
-.is-dragging-blocks,
-.is-dragging-blocks * {
-  cursor: grabbing !important;
-  -webkit-user-select: none;
-  user-select: none;
+.otp-action-circle-primary {
+  background-color: var(--otp-green);
+  color: #ffffff;
+  box-shadow:
+    0 8px 18px rgba(82, 174, 48, 0.28),
+    -2px -2px 6px rgba(255, 255, 255, 0.65);
 }
 
-/* Drop Marker for Single-Axis Block Reordering */
-.ds-block-list[data-drop]::after {
-  content: "";
-  position: fixed;
-  pointer-events: none;
-  left: var(--drop-x, 0px);
-  top: var(--drop-y, 0px);
-  width: var(--drop-w, 0px);
-  height: 3px;
+.otp-seg-track {
+  background-color: #e4e9f0;
   border-radius: 9999px;
-  background-color: var(--ds-accent-lime, #74bf1e);
-  box-shadow: 0 0 0 3px rgba(116, 191, 30, 0.25);
-  z-index: 60;
+  padding: 2px;
 }
 
-/* Gaze Guidance Animations (opt-in when reduced motion is off) */
-@keyframes ds-beacon-pulse {
+.otp-seg-pill-active {
+  background-color: var(--otp-green);
+  color: #ffffff;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(82, 174, 48, 0.28);
+}
+
+.otp-tag-new {
+  background-color: var(--otp-peach-bg);
+  color: var(--otp-peach-fg);
+  border-radius: 8px;
+}
+
+/* Subtle Kid/User Visual Cue Pulse (opt-in when reduced motion is off) */
+@keyframes ds-cue-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(116, 191, 30, 0.42);
+    box-shadow: 0 0 0 0 rgba(82, 174, 48, 0.35);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(116, 191, 30, 0);
+    box-shadow: 0 0 0 6px rgba(82, 174, 48, 0);
   }
 }
 
-@keyframes ds-saccade-dash {
-  to {
-    stroke-dashoffset: -24;
-  }
-}
-
-.ds-beacon-active {
+.otp-cue-ring {
   @media (prefers-reduced-motion: no-preference) {
-    animation: ds-beacon-pulse 2.2s ease-in-out infinite;
+    animation: ds-cue-pulse 2.4s ease-in-out infinite;
   }
-}
-
-.ds-saccade-flow {
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ds-saccade-dash 1.3s linear infinite;
-  }
-}
-
-.ds-saccade-flow.is-paused {
-  animation: none;
 }
 
 @theme inline {

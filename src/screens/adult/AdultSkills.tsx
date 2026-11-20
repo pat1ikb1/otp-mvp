@@ -1,66 +1,60 @@
 import { useMemo } from 'react';
-import { ArrowUpRight, Award, CheckCircle2, GraduationCap } from 'lucide-react';
+import { ArrowUpRight, Award, Car, CheckCircle2, GraduationCap } from 'lucide-react';
+import { DrivingLicenseHub } from '@/components/shared/DrivingLicenseHub';
 import { MoneyFlow } from '@/components/shared/MoneyFlow';
 import { BlockCanvas, type BlockDefinition } from '@/components/studio/BlockCanvas';
 import { Button } from '@/components/ui/button';
 import { SKILL_CATALOG } from '@/data/skillCatalog';
 import { formatFt } from '@/engine/finance';
 import { getAge } from '@/engine/rules';
-import { useDesignStudio } from '@/state/designStudio';
 import { useLifestart } from '@/state/store';
 
 export function AdultSkills() {
-  const { state, paySkillMerchant, rollSkillToTbsz, triggerAchievement } = useLifestart();
-  const { tokens } = useDesignStudio();
+  const {
+    state,
+    skillSubTab,
+    setSkillSubTab,
+    paySkillMerchant,
+    rollSkillToTbsz,
+    triggerAchievement,
+  } = useLifestart();
   const { core } = state;
   const age = getAge(core.monthIndex);
   const careerMerchants = SKILL_CATALOG.filter((m) => m.allowed);
 
-  const blocks = useMemo<BlockDefinition[]>(
+  const partnerBlocks = useMemo<BlockDefinition[]>(
     () => [
       {
         id: 'adult-skill-hero',
-        title: 'Career Skill Wallet',
-        eyeCue: 'Use or roll to TBSZ',
-        whyHere: 'Top anchor shows spendable career balance and 1-tap TBSZ rollover at 25+.',
         render: () => (
-          <div
-            style={{
-              borderRadius: 'var(--ds-card-radius)',
-              padding: 'var(--ds-card-padding)',
-              background: 'linear-gradient(135deg, var(--ds-header-bg) 0%, var(--ds-primary) 100%)',
-            }}
-            className="text-white shadow-sm"
-          >
+          <div className="ds-card space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-xs font-semibold text-emerald-100">
-                <GraduationCap className="h-4 w-4 text-[#74bf1e]" /> Career Skill Wallet
+              <span className="flex items-center gap-1.5 text-xs font-bold text-[#38571a]">
+                <GraduationCap className="h-4 w-4 text-[#52ae30]" /> Career Skill Wallet
               </span>
               {age >= 25 && (
-                <span className="rounded-full bg-[#c89b3c] px-2 py-0.5 text-[10px] font-bold text-[#08261e]">
+                <span className="otp-tag-new px-2 py-0.5 text-[10px] font-bold">
                   Rollover Ready
                 </span>
               )}
             </div>
-            <p className="mt-1.5 text-2xl font-extrabold tabular-nums">
+            <p className="text-2xl font-extrabold ds-text-primary tabular-nums">
               <MoneyFlow value={core.account.skillWallet.balance} />
             </p>
-            {tokens.copyDensity !== 'concise' && (
-              <p className="mt-1 text-[10px] text-emerald-100/90">
-                {age >= 25
-                  ? 'Roll remaining Skill funds tax-free into OTP TBSZ.'
-                  : '15% of monthly Super Bond yield funds your career until 25.'}
-              </p>
-            )}
+            <p className="text-[11px] ds-text-muted">
+              {age >= 25
+                ? 'Roll remaining Skill funds tax-free into OTP TBSZ.'
+                : '15% of monthly Super Bond yield funds your career until 25.'}
+            </p>
 
             {age >= 25 && core.account.skillWallet.balance > 0 && (
               <Button
                 size="sm"
                 onClick={rollSkillToTbsz}
                 style={{ borderRadius: 'var(--ds-btn-radius)' }}
-                className="ds-btn mt-2.5 w-full bg-[#c89b3c] text-xs font-bold text-[#08261e] hover:bg-[#b5892d]"
+                className="ds-btn w-full bg-[#38571a] text-xs font-bold text-white"
               >
-                <ArrowUpRight className="h-3.5 w-3.5" />
+                <ArrowUpRight className="h-3.5 w-3.5 text-[#74bf1e]" />
                 Roll {formatFt(core.account.skillWallet.balance)} to TBSZ
               </Button>
             )}
@@ -69,12 +63,9 @@ export function AdultSkills() {
       },
       {
         id: 'adult-skill-partners',
-        title: 'Career Certifications',
-        eyeCue: 'Pay partner tuition',
-        whyHere: 'Lists eligible degree & certification partners with single-tap payment.',
         render: () => (
-          <div className="ds-card space-y-2">
-            <p className="text-xs font-bold ds-text-primary">Career & Uni Partners</p>
+          <div className="ds-card space-y-2.5">
+            <p className="text-xs font-extrabold ds-text-primary">Career & Uni Partners</p>
             {careerMerchants.map((m) => (
               <div
                 key={m.id}
@@ -91,12 +82,8 @@ export function AdultSkills() {
                   size="xs"
                   disabled={core.account.skillWallet.balance < m.price}
                   onClick={() => paySkillMerchant(m.id)}
-                  style={{
-                    borderRadius: 'var(--ds-btn-radius)',
-                    backgroundColor: 'var(--ds-primary)',
-                    color: 'var(--ds-primary-fg)',
-                  }}
-                  className="ds-btn shrink-0 text-[10px] font-bold tabular-nums"
+                  style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                  className="ds-btn shrink-0 bg-[#38571a] text-[10px] font-bold text-white tabular-nums"
                 >
                   {formatFt(m.price)}
                 </Button>
@@ -107,13 +94,10 @@ export function AdultSkills() {
       },
       {
         id: 'adult-skill-cashback',
-        title: 'Positive-List Cashback',
-        eyeCue: 'Claim milestone rewards',
-        whyHere: 'Allows claiming remaining milestone bonuses into the Skill Wallet.',
         render: () => (
-          <div className="ds-card space-y-2">
-            <p className="flex items-center gap-1.5 text-xs font-bold ds-text-primary">
-              <Award className="h-4 w-4 text-[#005e48]" /> Milestone Cashback
+          <div className="ds-card space-y-2.5">
+            <p className="flex items-center gap-1.5 text-xs font-extrabold ds-text-primary">
+              <Award className="h-4 w-4 text-[#52ae30]" /> Milestone Cashback
             </p>
             {core.achievements.map((ach) => {
               const done = ach.unlockedAtMonth !== null;
@@ -130,19 +114,15 @@ export function AdultSkills() {
                     </div>
                   </div>
                   {done ? (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#005e48] px-2 py-0.5 text-[10px] font-bold text-white">
-                      <CheckCircle2 className="h-3 w-3" /> +{ach.cashback / 1000}k
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#38571a] px-2.5 py-0.5 text-[10px] font-bold text-white">
+                      <CheckCircle2 className="h-3 w-3 text-[#74bf1e]" /> +{ach.cashback / 1000}k
                     </span>
                   ) : (
                     <Button
                       size="xs"
                       onClick={() => triggerAchievement(ach.id)}
-                      style={{
-                        borderRadius: 'var(--ds-btn-radius)',
-                        backgroundColor: 'var(--ds-primary)',
-                        color: 'var(--ds-primary-fg)',
-                      }}
-                      className="ds-btn shrink-0 text-[10px] font-bold"
+                      style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                      className="ds-btn shrink-0 bg-[#38571a] text-[10px] font-bold text-white"
                     >
                       +{formatFt(ach.cashback)}
                     </Button>
@@ -154,12 +134,43 @@ export function AdultSkills() {
         ),
       },
     ],
-    [core, age, careerMerchants, paySkillMerchant, rollSkillToTbsz, triggerAchievement, tokens.copyDensity],
+    [core, age, careerMerchants, paySkillMerchant, rollSkillToTbsz, triggerAchievement],
   );
 
   return (
-    <div className="pb-2">
-      <BlockCanvas screenId="adult-skills" blocks={blocks} />
+    <div className="flex flex-col pb-2" style={{ gap: 'var(--ds-block-gap)' }}>
+      <div className="otp-seg-track grid grid-cols-2">
+        <button
+          type="button"
+          onClick={() => setSkillSubTab('driving')}
+          className={`inline-flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold transition-all ${
+            skillSubTab === 'driving'
+              ? 'otp-seg-pill-active'
+              : 'text-[#4a635c] hover:text-[#0b2e26]'
+          }`}
+        >
+          <Car className="h-3.5 w-3.5" />
+          Driver’s License
+        </button>
+        <button
+          type="button"
+          onClick={() => setSkillSubTab('partners')}
+          className={`inline-flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold transition-all ${
+            skillSubTab === 'partners'
+              ? 'otp-seg-pill-active'
+              : 'text-[#4a635c] hover:text-[#0b2e26]'
+          }`}
+        >
+          <GraduationCap className="h-3.5 w-3.5" />
+          Skill Partners
+        </button>
+      </div>
+
+      {skillSubTab === 'driving' ? (
+        <DrivingLicenseHub />
+      ) : (
+        <BlockCanvas screenId="adult-skills" blocks={partnerBlocks} />
+      )}
     </div>
   );
 }

@@ -36,26 +36,17 @@ export function AdultAdvisor() {
     () => [
       {
         id: 'advisor-chat',
-        title: 'Dóra Advisor Thread',
-        eyeCue: 'Read personalized reply',
-        whyHere: 'Establishes human advisory presence and displays live portfolio answers.',
         render: () => (
           <div className="ds-card space-y-2.5">
             <div className="flex items-center gap-2.5 border-b border-black/6 pb-2.5">
-              <div
-                style={{
-                  backgroundColor: 'var(--ds-primary)',
-                  color: 'var(--ds-primary-fg)',
-                }}
-                className="flex h-8 w-8 items-center justify-center rounded-full"
-              >
-                <MessageSquareHeart className="h-4 w-4" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#38571a] text-white">
+                <MessageSquareHeart className="h-4 w-4 text-[#74bf1e]" />
               </div>
               <div className="flex-1">
-                <p className="text-xs font-bold ds-text-primary">Dóra · OTP Advisor</p>
+                <p className="text-xs font-extrabold ds-text-primary">Dóra · OTP Advisor</p>
                 <p className="text-[10px] ds-text-muted">Free for Lifestart & Gold members</p>
               </div>
-              <span className="h-2 w-2 rounded-full bg-[#74bf1e]" />
+              <span className="h-2 w-2 rounded-full bg-[#52ae30]" />
             </div>
 
             <div className="max-h-60 space-y-2 overflow-y-auto pr-1">
@@ -65,14 +56,12 @@ export function AdultAdvisor() {
                   className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    style={{
-                      borderRadius: 'var(--ds-btn-radius)',
-                      backgroundColor:
-                        m.sender === 'user' ? 'var(--ds-primary)' : 'var(--ds-card-muted-bg)',
-                      color:
-                        m.sender === 'user' ? 'var(--ds-primary-fg)' : 'var(--ds-text-primary)',
-                    }}
-                    className="max-w-[88%] px-3 py-2 text-xs leading-relaxed"
+                    style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                    className={`max-w-[88%] px-3 py-2 text-xs leading-relaxed ${
+                      m.sender === 'user'
+                        ? 'bg-[#38571a] text-white'
+                        : 'bg-[#f2f5f8] text-[#0b2e26]'
+                    }`}
                   >
                     {m.text}
                   </div>
@@ -84,13 +73,10 @@ export function AdultAdvisor() {
       },
       {
         id: 'advisor-prompts',
-        title: 'Quick Advisor Questions',
-        eyeCue: 'Tap a financial question',
-        whyHere: 'Curated question chips eliminate blank-chat paralysis.',
         render: () => (
-          <div className="ds-card space-y-2">
+          <div className="ds-card space-y-2.5">
             <p className="flex items-center gap-1 text-[10px] font-bold ds-text-muted uppercase">
-              <Sparkles className="h-3 w-3 text-[#c89b3c]" /> Ask Dóra
+              <Sparkles className="h-3 w-3 text-[#52ae30]" /> Ask Dóra
             </p>
             <div className="flex flex-wrap gap-1.5">
               {ADVISOR_PROMPTS.map((p) => (
@@ -99,7 +85,7 @@ export function AdultAdvisor() {
                   type="button"
                   onClick={() => handlePrompt(p.id)}
                   style={{ borderRadius: 'var(--ds-btn-radius)' }}
-                  className="ds-card-muted px-2.5 py-1.5 text-left text-[11px] font-semibold transition-colors hover:bg-[#e5f5de] hover:text-[#08261e]"
+                  className="ds-card-muted px-3 py-1.5 text-left text-[11px] font-semibold transition-colors hover:bg-[#e8f5e4] hover:text-[#38571a]"
                 >
                   {p.question}
                 </button>

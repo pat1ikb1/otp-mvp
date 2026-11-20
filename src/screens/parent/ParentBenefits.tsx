@@ -19,22 +19,18 @@ export function ParentBenefits() {
     () => [
       {
         id: 'benefits-tips',
-        title: 'Stage Focus Tip',
-        eyeCue: 'Read current stage tip',
-        whyHere: 'Progressive disclosure shows only the active age tip first, cutting reading load by 70%.',
         render: () => (
           <div className="ds-card">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <BellRing className="h-4 w-4 text-[#005e48]" />
-                <p className="text-xs font-bold ds-text-primary">Current Stage Insight</p>
+                <BellRing className="h-4 w-4 text-[#52ae30]" />
+                <p className="text-xs font-extrabold ds-text-primary">Stage Focus Tip</p>
               </div>
               {tips.length > 1 && (
                 <button
                   type="button"
                   onClick={() => setShowAllTips((v) => !v)}
-                  style={{ color: 'var(--ds-primary)' }}
-                  className="inline-flex items-center gap-0.5 text-[10px] font-bold"
+                  className="inline-flex items-center gap-0.5 text-[10px] font-bold text-[#38571a]"
                 >
                   {showAllTips ? 'Collapse' : `All (${tips.length})`}
                   {showAllTips ? (
@@ -46,12 +42,12 @@ export function ParentBenefits() {
               )}
             </div>
 
-            <div className="mt-2 space-y-2">
+            <div className="mt-2.5 space-y-2">
               {visibleTips.map((tip) => (
-                <div key={tip.id} className="ds-card-muted p-2.5">
+                <div key={tip.id} className="ds-card-muted p-3">
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-xs font-bold ds-text-primary">{tip.title}</p>
-                    <span className="shrink-0 rounded-full bg-[#e5f5de] px-2 py-0.5 text-[9px] font-bold text-[#08261e]">
+                    <span className="otp-tag-new shrink-0 px-2 py-0.5 text-[9px] font-bold">
                       {tip.tag}
                     </span>
                   </div>
@@ -64,27 +60,21 @@ export function ParentBenefits() {
       },
       {
         id: 'benefits-partners',
-        title: 'OTP & Partner Perks',
-        eyeCue: 'Browse family discounts',
-        whyHere: 'Clean perk directory sits below the active insight with scannable OTP badges.',
         render: () => (
           <div className="ds-card">
             <div className="flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-[#005e48]" />
-              <p className="text-xs font-bold ds-text-primary">Family & Partner Perks</p>
+              <Sparkles className="h-4 w-4 text-[#52ae30]" />
+              <p className="text-xs font-extrabold ds-text-primary">Family & Partner Perks</p>
             </div>
-            <div className="mt-2 space-y-1.5">
+            <div className="mt-2.5 space-y-2">
               {parentPartners.map((p) => (
-                <div
-                  key={p.id}
-                  className="ds-card-muted flex items-start gap-2.5 p-2.5"
-                >
+                <div key={p.id} className="ds-card-muted flex items-start gap-2.5 p-2.5">
                   <span className="text-base leading-none">{p.emoji}</span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-1">
                       <p className="truncate text-xs font-bold ds-text-primary">{p.name}</p>
                       {p.isOtpEcosystem && (
-                        <span className="shrink-0 rounded-full bg-[#005e48] px-1.5 py-0.5 text-[9px] font-bold text-white">
+                        <span className="shrink-0 rounded-full bg-[#38571a] px-2 py-0.5 text-[9px] font-bold text-white">
                           OTP
                         </span>
                       )}

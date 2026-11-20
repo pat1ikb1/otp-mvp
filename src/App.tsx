@@ -1,4 +1,3 @@
-import { Compass, Eye, GitBranch, Move, Sparkles } from 'lucide-react';
 import { DemoPanel } from '@/components/stage/DemoPanel';
 import { PhoneFrame } from '@/components/stage/PhoneFrame';
 import { StageTimeline } from '@/components/stage/StageTimeline';
@@ -18,16 +17,10 @@ import { ParentBenefits } from '@/screens/parent/ParentBenefits';
 import { ParentGifting } from '@/screens/parent/ParentGifting';
 import { ParentHome } from '@/screens/parent/ParentHome';
 import { ParentPockets } from '@/screens/parent/ParentPockets';
-import {
-  DesignStudioProvider,
-  useDesignStudio,
-  type EyeGuidanceMode,
-} from '@/state/designStudio';
 import { LifestartProvider, useLifestart } from '@/state/store';
 
 function StageViewport() {
   const { state } = useLifestart();
-  const { tokens, updateToken } = useDesignStudio();
   const { core, ui } = state;
   const age = getAge(core.monthIndex);
 
@@ -78,100 +71,29 @@ function StageViewport() {
   };
 
   return (
-    <div className="flex min-h-screen w-screen flex-col justify-between bg-[#f4f7f5] px-5 py-3 lg:h-screen lg:overflow-hidden">
-      {/* Unified Studio & Eye-Flow Toolbar */}
-      <header className="mx-auto flex w-full max-w-6xl shrink-0 flex-wrap items-center justify-between gap-2">
+    <div className="flex min-h-screen w-screen flex-col justify-between bg-[#f2f5f8] px-6 py-3 lg:h-screen lg:overflow-hidden">
+      {/* Compact Brand Header */}
+      <header className="mx-auto flex w-full max-w-5xl shrink-0 items-center justify-between">
         <div className="flex items-center gap-2">
           <img
             src="/otp-logo.png"
             alt="OTP Bank"
             className="h-7 w-7 rounded-lg bg-white object-contain p-0.5 shadow-xs"
           />
-          <span className="text-sm font-extrabold tracking-tight text-[#08261e]">
+          <span className="text-sm font-extrabold tracking-tight text-[#0b2e26]">
             OTP Lifestart
           </span>
-          <span className="hidden items-center gap-1 rounded-full bg-[#e5f5de] px-2 py-0.5 text-[10px] font-bold text-[#08261e] sm:inline-flex">
-            <GitBranch className="h-3 w-3 text-[#005e48]" />
-            redesign/guided-ui-studio
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-1.5">
-          {/* Eye-Flow Mode Selector */}
-          <div
-            role="group"
-            aria-label="Visual eye-guidance mode"
-            className="flex items-center gap-0.5 rounded-full border border-[#dce5e1] bg-white p-0.5 shadow-xs"
-          >
-            <span className="hidden items-center gap-1 pl-2 pr-1 text-[10px] font-bold text-[#4a635c] md:inline-flex">
-              <Eye className="h-3 w-3 text-[#005e48]" /> Eye Guide:
-            </span>
-            {(
-              [
-                { id: 'beacons', label: 'Beacons ①②③' },
-                { id: 'vectors', label: 'Gaze Vectors' },
-                { id: 'spotlight', label: 'Spotlight' },
-                { id: 'off', label: 'Off' },
-              ] as Array<{ id: EyeGuidanceMode; label: string }>
-            ).map((mode) => (
-              <button
-                key={mode.id}
-                type="button"
-                onClick={() => updateToken('eyeMode', mode.id)}
-                className={`rounded-full px-2.5 py-1 text-[10px] font-bold transition-colors ${
-                  tokens.eyeMode === mode.id
-                    ? 'bg-[#08261e] text-[#74bf1e]'
-                    : 'text-[#4a635c] hover:text-[#08261e]'
-                }`}
-              >
-                {mode.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Quick Arrange Blocks Toggle */}
-          <button
-            type="button"
-            onClick={() => updateToken('studioEditMode', !tokens.studioEditMode)}
-            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold transition-colors ${
-              tokens.studioEditMode
-                ? 'border-[#08261e] bg-[#08261e] text-[#74bf1e]'
-                : 'border-[#dce5e1] bg-white text-[#08261e] hover:bg-[#ebf3f0]'
-            }`}
-          >
-            <Move className="h-3 w-3" />
-            {tokens.studioEditMode ? 'Done Moving' : 'Move Blocks'}
-          </button>
-
-          {/* Quick Copy Density Switch */}
-          <button
-            type="button"
-            onClick={() =>
-              updateToken(
-                'copyDensity',
-                tokens.copyDensity === 'concise' ? 'detailed' : 'concise',
-              )
-            }
-            className="inline-flex items-center gap-1 rounded-full border border-[#dce5e1] bg-white px-2.5 py-1 text-[10px] font-bold text-[#08261e] hover:bg-[#ebf3f0]"
-            title="Toggle concise vs detailed UI text"
-          >
-            {tokens.copyDensity === 'concise' ? (
-              <Sparkles className="h-3 w-3 text-[#005e48]" />
-            ) : (
-              <Compass className="h-3 w-3 text-[#005e48]" />
-            )}
-            <span>{tokens.copyDensity === 'concise' ? 'Zen Text' : 'Full Text'}</span>
-          </button>
+          <span className="text-xs font-medium text-[#4a635c]">· 0 → 25 Prototype</span>
         </div>
       </header>
 
-      {/* Main Centered Stage: Interactive Phone + Design Studio */}
-      <main className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col items-center justify-center gap-6 py-2 lg:flex-row">
+      {/* Centered Stage: Final Phone Interface + Demo Triggers */}
+      <main className="mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col items-center justify-center gap-7 py-2 lg:flex-row">
         <PhoneFrame takeover={takeover}>{renderScreen()}</PhoneFrame>
         <DemoPanel />
       </main>
 
-      {/* Unified Bottom 5-Stage Lifecycle & Age Scrubber */}
+      {/* Unified 5-Stage Timeline */}
       <footer className="shrink-0">
         <StageTimeline />
       </footer>
@@ -181,11 +103,9 @@ function StageViewport() {
 
 export function App() {
   return (
-    <DesignStudioProvider>
-      <LifestartProvider>
-        <StageViewport />
-      </LifestartProvider>
-    </DesignStudioProvider>
+    <LifestartProvider>
+      <StageViewport />
+    </LifestartProvider>
   );
 }
 

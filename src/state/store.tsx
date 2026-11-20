@@ -54,9 +54,24 @@ function createBootState(): AppStoreState {
   };
 }
 
+export interface DrivingFlowState {
+  instructorId: string | null;
+  bookedSlots: string[];
+  practiceHours: number;
+  activeStep: number;
+}
+
 interface LifestartContextValue {
   state: AppStoreState;
   hasSavedSession: boolean;
+  skillSubTab: 'driving' | 'partners';
+  drivingFlow: DrivingFlowState;
+  setSkillSubTab: (tab: 'driving' | 'partners') => void;
+  openDrivingFlow: () => void;
+  selectDrivingInstructor: (id: string) => void;
+  toggleDrivingSlot: (slot: string) => void;
+  logPracticeDrive: (hours: number) => void;
+  setDrivingStep: (step: number) => void;
   openAccount: (params?: {
     childName?: string;
     monthlyContribution?: number;
@@ -93,6 +108,13 @@ const LifestartContext = createContext<LifestartContextValue | null>(null);
 export function LifestartProvider({ children }: { children: React.ReactNode }) {
   // Always boot fresh at Age 0 for safe classroom presentation
   const [state, setState] = useState<AppStoreState>(() => createBootState());
+  const [skillSubTab, setSkillSubTab] = useState<'driving' | 'partners'>('driving');
+  const [drivingFlow, setDrivingFlow] = useState<DrivingFlowState>({
+    instructorId: null,
+    bookedSlots: [],
+    practiceHours: 0,
+    activeStep: 0,
+  });
   const [hasSavedSession, setHasSavedSession] = useState<boolean>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -568,6 +590,72 @@ export function LifestartProvider({ children }: { children: React.ReactNode }) {
 
   const resetDemo = useCallback(() => {
     setState(createBootState());
+    setDrivingFlow({
+      instructorId: null,
+      bookedSlots: [],
+      practiceHours: 0,
+      activeStep: 0,
+    });
+  }, []);
+
+  const openDrivingFlow = useCallback(() => {
+    setSkillSubTab('driving');
+    setState((prev) => {
+      const age = getAge(prev.core.monthIndex);
+      const traveled =
+        age < 15
+          ? travelToMonth(prev.core, prev.snapshots, CONFIG.MONTH_AGE_15)
+          : { core: prev.core, snapshots: prev.snapshots, maxVisitedMonth: prev.maxVisitedMonth };
+      const nextAge = getAge(traveled.core.monthIndex);
+      return {
+        ...prev,
+        core: traveled.core,
+        snapshots: traveled.snapshots,
+        maxVisitedMonth: traveled.maxVisitedMonth,
+        ui: {
+          ...prev.ui,
+          activeView: nextAge >= 18 ? 'adult' : 'kid',
+          activeTab: 'skills',
+        },
+      };
+    });
+  }, []);
+
+  const selectDrivingInstructor = useCallback(
+    (id: string) => {
+      setDrivingFlow((prev) => ({ ...prev, instructorId: id, activeStep: Math.max(prev.activeStep, 2) }));
+      showToast('Instructor connected — schedule your drives!', 'success');
+    },
+    [showToast],
+  );
+
+  const toggleDrivingSlot = useCallback((slot: string) => {
+    setDrivingFlow((prev) => {
+      const exists = prev.bookedSlots.includes(slot);
+      const bookedSlots = exists
+        ? prev.bookedSlots.filter((s) => s !== slot)
+        : [...prev.bookedSlots, slot];
+      return { ...prev, bookedSlots };
+    });
+  }, []);
+
+  const logPracticeDrive = useCallback(
+    (hours: number) => {
+      setDrivingFlow((prev) => {
+        const nextHours = Math.min(30, prev.practiceHours + hours);
+        return {
+          ...prev,
+          practiceHours: nextHours,
+          activeStep: nextHours >= 30 ? 3 : prev.activeStep,
+        };
+      });
+      showToast(`+${hours}h logged toward your 30h driving target!`, 'info');
+    },
+    [showToast],
+  );
+
+  const setDrivingStep = useCallback((step: number) => {
+    setDrivingFlow((prev) => ({ ...prev, activeStep: Math.max(0, Math.min(3, step)) }));
   }, []);
 
   const restoreSavedSession = useCallback(() => {
@@ -601,6 +689,14 @@ export function LifestartProvider({ children }: { children: React.ReactNode }) {
       value={{
         state,
         hasSavedSession,
+        skillSubTab,
+        drivingFlow,
+        setSkillSubTab,
+        openDrivingFlow,
+        selectDrivingInstructor,
+        toggleDrivingSlot,
+        logPracticeDrive,
+        setDrivingStep,
         openAccount,
         jumpToMonth,
         setView,

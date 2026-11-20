@@ -4,12 +4,10 @@ import { BlockCanvas, type BlockDefinition } from '@/components/studio/BlockCanv
 import { Button } from '@/components/ui/button';
 import { CONFIG } from '@/engine/config';
 import { formatFt } from '@/engine/finance';
-import { useDesignStudio } from '@/state/designStudio';
 import { useLifestart } from '@/state/store';
 
 export function OnboardingFlow() {
   const { state, openAccount } = useLifestart();
-  const { tokens } = useDesignStudio();
   const [childName, setChildName] = useState(state.core.family.childName);
   const [monthly, setMonthly] = useState<number>(CONFIG.DEFAULT_MONTHLY);
   const [preset, setPreset] = useState<'balanced' | 'growth' | 'liquid'>('balanced');
@@ -25,40 +23,28 @@ export function OnboardingFlow() {
     () => [
       {
         id: 'onboard-grant',
-        title: 'Welcome Grant',
-        eyeCue: 'Claim +25,000 Ft grant',
-        whyHere: 'Top anchor leads with the immediate +25,000 Ft birth reward to create instant motivation.',
         render: () => (
-          <div
-            style={{
-              borderRadius: 'var(--ds-card-radius)',
-              padding: 'var(--ds-card-padding)',
-              background: 'linear-gradient(135deg, var(--ds-header-bg) 0%, var(--ds-primary) 100%)',
-            }}
-            className="text-white shadow-sm"
-          >
-            <div className="inline-flex items-center gap-1 rounded-full bg-[#74bf1e] px-2 py-0.5 text-[10px] font-bold text-[#08261e]">
-              <Sparkles className="h-3 w-3" />
-              Birth Grant
+          <div className="ds-card space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#e8f5e4] px-2.5 py-0.5 text-[10px] font-bold text-[#38571a]">
+                <Sparkles className="h-3 w-3 text-[#52ae30]" />
+                Birth Grant
+              </span>
+              <span className="otp-tag-new px-2 py-0.5 text-[10px] font-bold">+25,000 Ft</span>
             </div>
-            <h2 className="mt-2 text-base font-extrabold leading-snug">
-              Start {childName || 'Bence'}’s future with +25,000 Ft
+            <h2 className="text-base font-extrabold leading-snug ds-text-primary">
+              Start {childName || 'Bence'}’s Lifestart with +25,000 Ft
             </h2>
-            {tokens.copyDensity !== 'concise' && (
-              <p className="mt-1 text-[11px] text-emerald-100/90">
-                Invested from day one inside OTP Lifestart.
-              </p>
-            )}
+            <p className="text-xs ds-text-muted">
+              Compounding from day one with zero setup fee.
+            </p>
           </div>
         ),
       },
       {
         id: 'onboard-plan',
-        title: 'Child & Monthly Plan',
-        eyeCue: 'Set name & deposit',
-        whyHere: 'Groups the two essential inputs together so onboarding feels effortless.',
         render: () => (
-          <div className="ds-card space-y-3">
+          <div className="ds-card space-y-3.5">
             <div>
               <label
                 htmlFor="child-first-name"
@@ -73,29 +59,29 @@ export function OnboardingFlow() {
                 onChange={(e) => setChildName(e.target.value)}
                 placeholder="Bence"
                 style={{ borderRadius: 'var(--ds-btn-radius)' }}
-                className="mt-1 w-full border border-[#dce5e1] bg-[#f4f7f5] px-3 py-2 text-sm font-semibold text-[#08261e] focus:border-[#005e48]"
+                className="mt-1.5 w-full border border-black/10 bg-[#f2f5f8] px-3.5 py-2 text-sm font-semibold text-[#0b2e26] focus:border-[#52ae30]"
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between text-[11px]">
                 <span className="font-semibold ds-text-muted">Monthly Deposit</span>
-                <span style={{ color: 'var(--ds-primary)' }} className="font-extrabold tabular-nums">
+                <span className="font-extrabold text-[#38571a] tabular-nums">
                   {formatFt(monthly)}/mo
                 </span>
               </div>
-              <div className="mt-1.5 grid grid-cols-3 gap-1.5">
+              <div className="mt-2 grid grid-cols-3 gap-2">
                 {[5_000, 10_000, 20_000].map((amt) => (
                   <button
                     key={amt}
                     type="button"
                     onClick={() => setMonthly(amt)}
-                    style={{
-                      borderRadius: 'var(--ds-btn-radius)',
-                      backgroundColor: monthly === amt ? 'var(--ds-primary)' : 'var(--ds-card-muted-bg)',
-                      color: monthly === amt ? 'var(--ds-primary-fg)' : 'var(--ds-text-primary)',
-                    }}
-                    className="ds-btn py-2 text-xs font-bold tabular-nums"
+                    style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                    className={`ds-btn py-2 text-xs font-bold tabular-nums ${
+                      monthly === amt
+                        ? 'bg-[#38571a] text-white'
+                        : 'bg-[#f2f5f8] text-[#0b2e26] hover:bg-[#e8eef3]'
+                    }`}
                   >
                     {amt / 1000}k Ft
                   </button>
@@ -107,14 +93,11 @@ export function OnboardingFlow() {
       },
       {
         id: 'onboard-split',
-        title: 'Strategy & Launch',
-        eyeCue: 'Pick split & open',
-        whyHere: 'Closes with a single high-contrast CTA right below the preset choice.',
         render: () => (
-          <div className="ds-card space-y-3">
+          <div className="ds-card space-y-3.5">
             <div>
               <p className="text-[11px] font-semibold ds-text-muted">3-Pocket Preset</p>
-              <div className="mt-1.5 grid grid-cols-3 gap-1.5">
+              <div className="mt-2 grid grid-cols-3 gap-1.5">
                 {(
                   [
                     { id: 'balanced', label: 'Balanced', split: '60 / 25 / 15' },
@@ -126,18 +109,14 @@ export function OnboardingFlow() {
                     key={opt.id}
                     type="button"
                     onClick={() => setPreset(opt.id)}
-                    style={{
-                      borderRadius: 'var(--ds-btn-radius)',
-                      borderColor: preset === opt.id ? 'var(--ds-primary)' : 'var(--ds-border-color)',
-                      backgroundColor: preset === opt.id ? 'var(--stage-badge-bg)' : 'transparent',
-                    }}
-                    className="ds-btn border p-2 text-left"
+                    className={`rounded-2xl border p-2 text-left transition-colors ${
+                      preset === opt.id
+                        ? 'border-[#52ae30] bg-[#e8f5e4]'
+                        : 'border-transparent bg-[#f2f5f8]'
+                    }`}
                   >
                     <p className="text-[10px] font-bold ds-text-primary">{opt.label}</p>
-                    <p
-                      style={{ color: 'var(--ds-primary)' }}
-                      className="mt-0.5 text-[10px] font-extrabold tabular-nums"
-                    >
+                    <p className="mt-0.5 text-[10px] font-extrabold text-[#38571a] tabular-nums">
                       {opt.split}
                     </p>
                   </button>
@@ -154,14 +133,10 @@ export function OnboardingFlow() {
                   allocation,
                 })
               }
-              style={{
-                borderRadius: 'var(--ds-btn-radius)',
-                backgroundColor: 'var(--ds-primary)',
-                color: 'var(--ds-primary-fg)',
-              }}
-              className="ds-btn h-11 w-full text-sm font-bold hover:opacity-95"
+              style={{ borderRadius: 'var(--ds-btn-radius)' }}
+              className="ds-btn h-11 w-full bg-[#38571a] text-sm font-bold text-white hover:bg-[#2c4614]"
             >
-              <CheckCircle2 className="h-4 w-4" />
+              <CheckCircle2 className="h-4 w-4 text-[#74bf1e]" />
               Open & Claim +25k Ft
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -169,7 +144,7 @@ export function OnboardingFlow() {
         ),
       },
     ],
-    [childName, monthly, preset, allocation, openAccount, tokens.copyDensity],
+    [childName, monthly, preset, allocation, openAccount],
   );
 
   return (

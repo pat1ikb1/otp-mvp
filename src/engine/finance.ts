@@ -1,11 +1,38 @@
 import { CONFIG } from '@/engine/config';
 import { getTbszStatus } from '@/engine/rules';
 import type {
+  Allocation,
   DividendMode,
   FeesVsValueBreakdown,
   HistoryPoint,
   LifestartCoreState,
+  PocketKey,
 } from '@/types/lifestart';
+
+export function rebalanceThreePockets(
+  current: Allocation,
+  changedKey: PocketKey,
+  rawValue: number,
+): Allocation {
+  const nextVal = Math.max(0, Math.min(100, Math.round(rawValue)));
+  const others = (['long', 'mid', 'short'] as PocketKey[]).filter((k) => k !== changedKey);
+  const [k1, k2] = others;
+  const remainder = 100 - nextVal;
+  const prevOthersSum = current[k1] + current[k2];
+
+  const val1 =
+    prevOthersSum > 0
+      ? Math.round((current[k1] / prevOthersSum) * remainder)
+      : Math.round(remainder / 2);
+  const val2 = remainder - val1;
+
+  return {
+    ...current,
+    [changedKey]: nextVal,
+    [k1]: val1,
+    [k2]: val2,
+  };
+}
 
 export function totalBalance(core: LifestartCoreState): number {
   const { long, mid, short } = core.account.pockets;

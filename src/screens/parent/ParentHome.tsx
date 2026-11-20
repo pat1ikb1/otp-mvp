@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Gift, GraduationCap, Plus, TrendingUp, X } from 'lucide-react';
+import { Gift, GraduationCap, Plus, SlidersHorizontal, Sparkles, TrendingUp, X } from 'lucide-react';
 import { BondCard } from '@/components/shared/BondCard';
 import { GrowthChart } from '@/components/shared/GrowthChart';
 import { MoneyFlow } from '@/components/shared/MoneyFlow';
@@ -8,98 +8,117 @@ import { BlockCanvas, type BlockDefinition } from '@/components/studio/BlockCanv
 import { Button } from '@/components/ui/button';
 import { bondValue, currentDividendRate, totalBalance } from '@/engine/finance';
 import { getAge } from '@/engine/rules';
-import { useDesignStudio } from '@/state/designStudio';
 import { useLifestart } from '@/state/store';
 
 export function ParentHome() {
   const { state, deposit, setTab } = useLifestart();
-  const { tokens } = useDesignStudio();
   const { core } = state;
   const age = getAge(core.monthIndex);
   const total = totalBalance(core);
   const annualEstDividend = bondValue(core) * currentDividendRate(core);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  // Locked Final Order: ["parent-hero", "parent-chart", "parent-bond", "parent-pockets"]
   const blocks = useMemo<BlockDefinition[]>(
     () => [
       {
         id: 'parent-hero',
-        title: 'Total Value & CTA',
-        eyeCue: 'Check balance & top up',
-        whyHere: 'F-Pattern Top Anchor: shows net future wealth and the single primary action (+ Deposit) immediately.',
         render: () => (
-          <div className="ds-card">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="text-[11px] font-semibold ds-text-muted">
-                  {core.family.childName}’s Lifestart Value
-                </p>
-                <p className="mt-0.5 text-2xl font-extrabold tracking-tight ds-text-primary">
-                  <MoneyFlow value={total} />
-                </p>
-              </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#e5f5de] px-2 py-0.5 text-[10px] font-bold text-[#08261e]">
-                <TrendingUp className="h-3 w-3 text-[#005e48]" />
-                +<MoneyFlow value={annualEstDividend} />/yr
-              </span>
+          <div className="space-y-4">
+            {/* OTP Circular Quick Action Bubbles (matching Template/card3.webp) */}
+            <div className="grid grid-cols-4 gap-2 text-center">
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(true)}
+                className="flex flex-col items-center gap-1.5"
+              >
+                <span className="otp-action-circle-primary flex h-12 w-12 items-center justify-center rounded-full">
+                  <Plus className="h-5 w-5" />
+                </span>
+                <span className="text-[10px] font-bold text-[#0b2e26]">Top Up</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTab('gifting')}
+                className="flex flex-col items-center gap-1.5"
+              >
+                <span className="otp-action-circle flex h-12 w-12 items-center justify-center rounded-full">
+                  <Gift className="h-5 w-5" />
+                </span>
+                <span className="text-[10px] font-semibold text-[#4a635c]">Gift Link</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTab('pockets')}
+                className="flex flex-col items-center gap-1.5"
+              >
+                <span className="otp-action-circle flex h-12 w-12 items-center justify-center rounded-full">
+                  <SlidersHorizontal className="h-5 w-5" />
+                </span>
+                <span className="text-[10px] font-semibold text-[#4a635c]">Split</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTab('benefits')}
+                className="flex flex-col items-center gap-1.5"
+              >
+                <span className="otp-action-circle flex h-12 w-12 items-center justify-center rounded-full">
+                  <Sparkles className="h-5 w-5" />
+                </span>
+                <span className="text-[10px] font-semibold text-[#4a635c]">Perks</span>
+              </button>
             </div>
 
-            {tokens.copyDensity === 'detailed' && (
-              <p className="mt-2 rounded-xl bg-[#ebf3f0] px-2.5 py-1.5 text-[11px] font-medium text-[#08261e]">
-                Compounding automatically across 3 dedicated pockets.
-              </p>
-            )}
-
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <Button
-                size="sm"
-                onClick={() => setDrawerOpen(true)}
-                style={{
-                  borderRadius: 'var(--ds-btn-radius)',
-                  backgroundColor: 'var(--ds-primary)',
-                  color: 'var(--ds-primary-fg)',
-                }}
-                className="ds-btn h-9 text-xs font-bold hover:opacity-95"
-              >
-                <Plus className="h-3.5 w-3.5" /> Top Up
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setTab('gifting')}
-                style={{ borderRadius: 'var(--ds-btn-radius)' }}
-                className="ds-btn h-9 border-[#dce5e1] text-xs font-semibold ds-text-primary"
-              >
-                <Gift className="h-3.5 w-3.5 text-[#005e48]" /> Gift Link
-              </Button>
+            {/* White Neuromorphic Total Value Card */}
+            <div className="ds-card">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="text-[11px] font-semibold ds-text-muted">
+                    {core.family.childName}’s Lifestart Value
+                  </p>
+                  <p className="mt-1 text-2xl font-extrabold tracking-tight ds-text-primary">
+                    <MoneyFlow value={total} />
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#e8f5e4] px-2.5 py-1 text-[10px] font-bold text-[#38571a]">
+                  <TrendingUp className="h-3 w-3 text-[#52ae30]" />
+                  +<MoneyFlow value={annualEstDividend} />/yr
+                </span>
+              </div>
             </div>
           </div>
         ),
       },
       {
+        id: 'parent-chart',
+        render: () => <GrowthChart core={core} />,
+      },
+      {
+        id: 'parent-bond',
+        render: () => <BondCard core={core} />,
+      },
+      {
         id: 'parent-pockets',
-        title: '3-Pocket Split',
-        eyeCue: 'Scan pocket balances',
-        whyHere: 'Proportional bar + 3 color-coded pockets make allocation readable in 1 second without prose.',
         render: () => (
-          <div className="space-y-1.5">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between px-0.5">
-              <p className="text-xs font-bold ds-text-primary">3-Pocket Allocation</p>
+              <p className="text-xs font-extrabold ds-text-primary">3-Pocket Split</p>
               <button
                 type="button"
                 onClick={() => setTab('pockets')}
-                style={{ color: 'var(--ds-primary)' }}
-                className="text-[11px] font-bold hover:underline"
+                className="text-[11px] font-bold text-[#38571a] hover:underline"
               >
-                Edit split →
+                Adjust →
               </button>
             </div>
 
-            {/* Visual Proportional Bar */}
-            <div className="flex h-2 w-full overflow-hidden rounded-full bg-black/8">
+            <div className="flex h-2 w-full overflow-hidden rounded-full bg-[#e4e9f0]">
               <div
                 style={{ width: `${core.account.allocation.long}%` }}
-                className="bg-[#005e48] transition-all"
+                className="bg-[#38571a] transition-all"
               />
               <div
                 style={{ width: `${core.account.allocation.mid}%` }}
@@ -107,7 +126,7 @@ export function ParentHome() {
               />
               <div
                 style={{ width: `${core.account.allocation.short}%` }}
-                className="bg-[#74bf1e] transition-all"
+                className="bg-[#52ae30] transition-all"
               />
             </div>
 
@@ -131,12 +150,12 @@ export function ParentHome() {
             />
 
             {age >= 7 && (
-              <div className="flex items-center justify-between rounded-xl border border-amber-300/70 bg-amber-50 px-3 py-2 text-xs text-amber-950">
-                <span className="inline-flex items-center gap-1.5 font-semibold">
-                  <GraduationCap className="h-3.5 w-3.5 text-amber-700" />
+              <div className="ds-card flex items-center justify-between !py-3 text-xs">
+                <span className="inline-flex items-center gap-1.5 font-bold text-[#0b2e26]">
+                  <GraduationCap className="h-4 w-4 text-[#52ae30]" />
                   Skill Wallet (15% yield)
                 </span>
-                <span className="font-extrabold">
+                <span className="font-extrabold text-[#38571a]">
                   <MoneyFlow value={core.account.skillWallet.balance} />
                 </span>
               </div>
@@ -144,22 +163,8 @@ export function ParentHome() {
           </div>
         ),
       },
-      {
-        id: 'parent-bond',
-        title: 'Super Bond Yield',
-        eyeCue: 'Verify inflation shield',
-        whyHere: 'High-contrast card reinforces trust with live annual yield & inflation protection.',
-        render: () => <BondCard core={core} />,
-      },
-      {
-        id: 'parent-chart',
-        title: '0→25 Trajectory',
-        eyeCue: 'Project Age 25 outcome',
-        whyHere: 'Visual payoff curve sits at the bottom to anchor long-term confidence.',
-        render: () => <GrowthChart core={core} />,
-      },
     ],
-    [core, age, total, annualEstDividend, setTab, tokens.copyDensity],
+    [core, age, total, annualEstDividend, setTab],
   );
 
   return (
@@ -168,10 +173,10 @@ export function ParentHome() {
 
       {/* Quick In-Phone Deposit Sheet */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/40 p-3 sm:absolute sm:inset-0">
+        <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/35 p-3 sm:absolute sm:inset-0">
           <div className="ds-card w-full shadow-2xl">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-bold ds-text-primary">Quick Top-Up</p>
+              <p className="text-sm font-extrabold ds-text-primary">Quick Top-Up</p>
               <button
                 type="button"
                 aria-label="Close deposit sheet"
@@ -193,12 +198,8 @@ export function ParentHome() {
                     deposit(amt, 'long');
                     setDrawerOpen(false);
                   }}
-                  style={{
-                    borderRadius: 'var(--ds-btn-radius)',
-                    backgroundColor: 'var(--ds-primary)',
-                    color: 'var(--ds-primary-fg)',
-                  }}
-                  className="ds-btn text-xs font-bold"
+                  style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                  className="ds-btn bg-[#38571a] text-xs font-bold text-white"
                 >
                   +{amt / 1000}k Ft
                 </Button>

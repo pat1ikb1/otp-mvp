@@ -52,7 +52,7 @@ describe('Design Studio WCAG contrast & layout helpers', () => {
     expect(vars['--ds-btn-radius']).toBe('18px');
     expect(vars['--ds-phone-radius']).toBe('48px');
     expect(vars['--ds-font-scale']).toBe('1.08');
-    expect(vars['--ds-primary']).toBe('#005e48');
+    expect(vars['--ds-primary']).toBe('#38571a');
     expect(vars['--ds-primary-fg']).toBe('#ffffff');
   });
 });

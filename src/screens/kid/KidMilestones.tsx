@@ -24,17 +24,14 @@ export function KidMilestones() {
     () => [
       {
         id: 'quests-achievements',
-        title: 'Cashback Quests',
-        eyeCue: 'Unlock career cashback',
-        whyHere: 'Single-tap quest rewards show immediate Skill Wallet upside.',
         render: () => (
-          <div className="ds-card space-y-2">
+          <div className="ds-card space-y-2.5">
             <div className="flex items-center justify-between">
-              <p className="flex items-center gap-1.5 text-xs font-bold ds-text-primary">
-                <Award className="h-4 w-4 text-[#005e48]" /> Career Cashback
+              <p className="flex items-center gap-1.5 text-xs font-extrabold ds-text-primary">
+                <Award className="h-4 w-4 text-[#52ae30]" /> Career Cashback
               </p>
               {!unlocked && (
-                <span className="rounded-full bg-[#eef3f1] px-2 py-0.5 text-[10px] font-bold text-[#4a635c]">
+                <span className="rounded-full bg-[#e8f5e4] px-2 py-0.5 text-[10px] font-bold text-[#38571a]">
                   Unlocks at 15
                 </span>
               )}
@@ -45,10 +42,8 @@ export function KidMilestones() {
               return (
                 <div
                   key={ach.id}
-                  className={`flex items-center justify-between gap-2 rounded-xl border p-2.5 ${
-                    done
-                      ? 'border-[#005e48]/25 bg-[#e5f5de]/70'
-                      : 'border-black/6 bg-[#f4f7f5]'
+                  className={`flex items-center justify-between gap-2 rounded-2xl p-2.5 ${
+                    done ? 'bg-[#e8f5e4]' : 'bg-[#f2f5f8]'
                   }`}
                 >
                   <div className="flex min-w-0 items-center gap-2">
@@ -59,20 +54,16 @@ export function KidMilestones() {
                     </div>
                   </div>
                   {done ? (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#005e48] px-2 py-0.5 text-[10px] font-bold text-white">
-                      <CheckCircle2 className="h-3 w-3" /> +{ach.cashback / 1000}k
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#38571a] px-2.5 py-0.5 text-[10px] font-bold text-white">
+                      <CheckCircle2 className="h-3 w-3 text-[#74bf1e]" /> +{ach.cashback / 1000}k
                     </span>
                   ) : (
                     <Button
                       size="xs"
                       disabled={!unlocked}
                       onClick={() => triggerAchievement(ach.id)}
-                      style={{
-                        borderRadius: 'var(--ds-btn-radius)',
-                        backgroundColor: 'var(--ds-primary)',
-                        color: 'var(--ds-primary-fg)',
-                      }}
-                      className="ds-btn shrink-0 text-[10px] font-bold"
+                      style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                      className="ds-btn shrink-0 bg-[#38571a] text-[10px] font-bold text-white"
                     >
                       {unlocked ? `+${formatFt(ach.cashback)}` : <Lock className="h-3 w-3" />}
                     </Button>
@@ -85,28 +76,23 @@ export function KidMilestones() {
       },
       {
         id: 'quests-quiz',
-        title: '+0.25% Yield Quiz',
-        eyeCue: 'Complete 3-step quiz',
-        whyHere: '1-question-at-a-time stepper cuts cognitive overload vs showing 9 options at once.',
         render: () => (
-          <div className="ds-card space-y-2.5">
+          <div className="ds-card space-y-3">
             <div className="flex items-center justify-between">
-              <p className="flex items-center gap-1.5 text-xs font-bold ds-text-primary">
-                <Sparkles className="h-4 w-4 text-[#c89b3c]" /> Money Mastery Quiz
+              <p className="flex items-center gap-1.5 text-xs font-extrabold ds-text-primary">
+                <Sparkles className="h-4 w-4 text-[#52ae30]" /> Money Mastery Quiz
               </p>
-              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-900">
-                +0.25% Yield
-              </span>
+              <span className="otp-tag-new px-2 py-0.5 text-[10px] font-bold">+0.25% Yield</span>
             </div>
 
             {core.quizCompleted ? (
-              <div className="rounded-xl bg-[#e5f5de] p-3 text-xs font-bold text-[#08261e]">
+              <div className="rounded-2xl bg-[#e8f5e4] p-3 text-xs font-bold text-[#38571a]">
                 Mastered! Permanent +0.25% Super Bond yield boost active.
               </div>
             ) : !unlocked ? (
               <p className="text-xs ds-text-muted">Unlocks at age 15 to boost your Super Bond yield.</p>
             ) : (
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between text-[10px] font-bold ds-text-muted">
                   <span>
                     Question {step + 1} of {QUIZ_QUESTIONS.length}
@@ -120,9 +106,9 @@ export function KidMilestones() {
                         aria-label={`Jump to question ${i + 1}`}
                         className={`h-1.5 w-5 rounded-full transition-colors ${
                           i === step
-                            ? 'bg-[#005e48]'
+                            ? 'bg-[#38571a]'
                             : answers[q.id] !== undefined
-                              ? 'bg-[#74bf1e]'
+                              ? 'bg-[#52ae30]'
                               : 'bg-black/15'
                         }`}
                       />
@@ -149,8 +135,8 @@ export function KidMilestones() {
                           selected
                             ? isWrong
                               ? 'border-red-400 bg-red-50 font-semibold text-red-700'
-                              : 'border-[#005e48] bg-[#e5f5de] font-bold text-[#08261e]'
-                            : 'border-[#dce5e1] bg-[#f4f7f5] text-[#08261e] hover:bg-[#ebf3f0]'
+                              : 'border-[#52ae30] bg-[#e8f5e4] font-bold text-[#38571a]'
+                            : 'border-transparent bg-[#f2f5f8] text-[#0b2e26] hover:bg-[#e8eef3]'
                         }`}
                       >
                         {opt}
@@ -172,6 +158,8 @@ export function KidMilestones() {
                     variant="outline"
                     disabled={step === 0}
                     onClick={() => setStep((s) => Math.max(0, s - 1))}
+                    style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                    className="ds-btn"
                   >
                     <ChevronLeft className="h-3.5 w-3.5" /> Back
                   </Button>
@@ -182,10 +170,8 @@ export function KidMilestones() {
                       size="xs"
                       disabled={answers[currentQ.id] === undefined}
                       onClick={() => setStep((s) => Math.min(QUIZ_QUESTIONS.length - 1, s + 1))}
-                      style={{
-                        backgroundColor: 'var(--ds-primary)',
-                        color: 'var(--ds-primary-fg)',
-                      }}
+                      style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                      className="ds-btn bg-[#38571a] text-white"
                     >
                       Next <ChevronRight className="h-3.5 w-3.5" />
                     </Button>
@@ -198,11 +184,8 @@ export function KidMilestones() {
                         if (allCorrect) submitQuiz();
                         else setQuizFeedback(true);
                       }}
-                      style={{
-                        backgroundColor: 'var(--ds-primary)',
-                        color: 'var(--ds-primary-fg)',
-                      }}
-                      className="font-bold"
+                      style={{ borderRadius: 'var(--ds-btn-radius)' }}
+                      className="ds-btn bg-[#52ae30] font-bold text-white"
                     >
                       Claim +0.25% Boost
                     </Button>
